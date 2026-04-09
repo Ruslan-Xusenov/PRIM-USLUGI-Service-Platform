@@ -163,11 +163,11 @@ export default function RootLayout({ children }) {
                         >
                           <Link 
                             href={link.href} 
-                            className="flex items-center justify-between text-lg font-bold text-white/90 hover:text-accent group"
+                            className="flex items-center justify-between text-xl font-bold text-white hover:text-accent group"
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             <span>{link.name}</span>
-                            <ChevronRight size={20} className="text-white/20 group-hover:text-accent group-hover:translate-x-1 transition-all" />
+                            <ChevronRight size={24} className="text-white group-hover:text-accent group-hover:translate-x-1 transition-all" />
                           </Link>
                         </motion.li>
                       ))}
@@ -177,11 +177,11 @@ export default function RootLayout({ children }) {
                       <div className="space-y-4">
                         <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent px-1">Contacts</span>
                         <div className="flex flex-col gap-4 bg-white/5 p-6 rounded-2xl border border-white/5">
-                          <a href="tel:+79998887766" className="flex items-center gap-4 text-white font-bold text-lg">
-                            <Phone size={20} className="text-accent" /> +7 (999) 888-77-66
+                          <a href="tel:+79998887766" className="flex items-center gap-4 text-white font-bold text-xl">
+                            <Phone size={24} className="text-accent" /> +7 (999) 888-77-66
                           </a>
-                          <a href="mailto:info@prim-uslugi.ru" className="flex items-center gap-4 text-white/70 text-sm">
-                            <Mail size={18} className="text-accent" /> info@prim-uslugi.ru
+                          <a href="mailto:info@prim-uslugi.ru" className="flex items-center gap-4 text-white font-semibold text-lg">
+                            <Mail size={22} className="text-accent" /> info@prim-uslugi.ru
                           </a>
                         </div>
                       </div>
@@ -197,9 +197,9 @@ export default function RootLayout({ children }) {
                   </div>
 
                   <div className="p-8 border-t border-white/5 bg-black/20 flex flex-wrap gap-4">
-                    <span className="text-[9px] uppercase tracking-widest font-bold text-white/30">Vladivostok</span>
-                    <span className="text-[9px] uppercase tracking-widest font-bold text-white/30">Ussuriysk</span>
-                    <span className="text-[9px] uppercase tracking-widest font-bold text-white/30">Nakhodka</span>
+                    <span className="text-[10px] uppercase tracking-widest font-bold text-white">Vladivostok</span>
+                    <span className="text-[10px] uppercase tracking-widest font-bold text-white">Ussuriysk</span>
+                    <span className="text-[10px] uppercase tracking-widest font-bold text-white">Nakhodka</span>
                   </div>
                 </div>
               </motion.div>
@@ -281,7 +281,7 @@ export default function RootLayout({ children }) {
               </div>
             </div>
 
-            <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-grey-500">
+            <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-white font-medium">
               <p>© {new Date().getFullYear()} Prim-Uslugi. Инновационные решения услуг.</p>
               <div className="flex gap-8">
                 <Link href="#" className="hover:text-white">VK</Link>

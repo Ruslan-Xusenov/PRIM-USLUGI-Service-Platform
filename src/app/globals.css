@@ -224,9 +224,9 @@ img { max-width: 100%; height: auto; display: block; }
 .text-white { color: white; }
 .text-primary { color: var(--primary); }
 .text-accent { color: var(--accent); }
-.text-grey-400 { color: #f8fafc; } /* Maximum brightness for secondary text */
-.text-grey-500 { color: #f1f5f9; }
-.text-grey-600 { color: #ffffff; } /* Pure white for high visibility */
+.text-grey-400 { color: #f9fafb !important; } /* Maximum brightness for descriptions */
+.text-grey-500 { color: #ffffff !important; }
+.text-grey-600 { color: #ffffff !important; }
 .bg-white { background-color: rgba(255, 255, 255, 0.03); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.1); }
 .bg-bg-main { background: transparent; }
 .bg-primary { background: rgba(15, 23, 42, 0.4); } /* Soft dark tint */

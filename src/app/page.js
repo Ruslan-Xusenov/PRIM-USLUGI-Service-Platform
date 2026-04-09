@@ -126,8 +126,8 @@ export default function Home() {
                     {stat.icon}
                   </div>
                   <div>
-                    <span className="text-3xl font-bold block">{stat.value}</span>
-                    <span className="text-xs text-grey-400 uppercase tracking-widest">{stat.label}</span>
+                    <span className="text-3xl font-bold block text-white">{stat.value}</span>
+                    <span className="text-xs text-white font-bold uppercase tracking-widest">{stat.label}</span>
                   </div>
                 </div>
               ))}
