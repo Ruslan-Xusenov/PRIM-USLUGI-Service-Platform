@@ -151,8 +151,8 @@ export default function RootLayout({ children }) {
                     </button>
                   </div>
 
-                  <div className="flex-1 overflow-y-auto px-6 py-8">
-                    <ul className="flex flex-col">
+                  <div className="flex-1 overflow-y-auto px-6 py-8 space-y-10">
+                    <ul className="flex flex-col space-y-2">
                       {navLinks.map((link, i) => (
                         <motion.li 
                           key={link.name}
@@ -174,9 +174,9 @@ export default function RootLayout({ children }) {
                     </ul>
 
                     <div className="mt-12 space-y-8">
-                      <div className="space-y-4">
+                      <div className="space-y-6">
                         <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent px-1">Contacts</span>
-                        <div className="flex flex-col gap-4 bg-white/5 p-6 rounded-2xl border border-white/5">
+                        <div className="flex flex-col gap-6 bg-white/5 p-6 rounded-2xl border border-white/5">
                           <a href="tel:+79998887766" className="flex items-center gap-4 text-white font-bold text-xl">
                             <Phone size={24} className="text-accent" /> +7 (999) 888-77-66
                           </a>
@@ -188,7 +188,7 @@ export default function RootLayout({ children }) {
 
                       <Link 
                         href="#contact" 
-                        className="btn btn-accent w-full py-4 text-white shadow-lg shadow-accent/20"
+                        className="btn btn-accent w-full py-5 text-lg text-white shadow-xl shadow-accent/20 mt-4"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         Заказать услугу
@@ -196,7 +196,7 @@ export default function RootLayout({ children }) {
                     </div>
                   </div>
 
-                  <div className="p-8 border-t border-white/5 bg-black/20 flex flex-wrap gap-4">
+                  <div className="p-10 border-t border-white/5 bg-black/20 flex flex-wrap gap-x-10 gap-y-4">
                     <span className="text-[10px] uppercase tracking-widest font-bold text-white">Vladivostok</span>
                     <span className="text-[10px] uppercase tracking-widest font-bold text-white">Ussuriysk</span>
                     <span className="text-[10px] uppercase tracking-widest font-bold text-white">Nakhodka</span>
