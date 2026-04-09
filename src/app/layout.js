@@ -44,8 +44,8 @@ export default function RootLayout({ children }) {
         {/* Navigation */}
         <header 
           className={`fixed top-0 left-0 right-0 z-1000 transition-all duration-700 ${
-            mobileMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
-          } ${isScrolled ? 'py-2' : 'py-5'}`}
+            isScrolled ? 'py-2' : 'py-5'
+          }`}
         >
           <div className="container">
             <nav 
@@ -136,8 +136,12 @@ export default function RootLayout({ children }) {
                       </div>
                       <span className="text-white font-bold tracking-tight">PRIM-USLUGI</span>
                     </Link>
-                    <button onClick={() => setMobileMenuOpen(false)} className="bg-white/10 p-2 rounded-xl text-white hover:bg-white/20 transition-colors">
-                      <X size={24} />
+                    <button 
+                      onClick={() => setMobileMenuOpen(false)} 
+                      className="bg-white/10 p-3 rounded-2xl text-white hover:bg-white/20 transition-all active:scale-90"
+                      style={{ cursor: 'pointer', pointerEvents: 'auto' }}
+                    >
+                      <X size={28} />
                     </button>
                   </div>
 
@@ -197,7 +201,7 @@ export default function RootLayout({ children }) {
           )}
         </AnimatePresence>
 
-        <main className={`${mobileMenuOpen ? 'hidden md:block' : 'block'}`}>
+        <main>
           {children}
         </main>
 
