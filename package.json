@@ -1,0 +1,30 @@
+{
+  "name": "prim-uslugi",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"next dev\" \"node src/lib/start-polling.js\"",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.3.0",
+    "@capacitor/cli": "^8.3.0",
+    "@capacitor/core": "^8.3.0",
+    "@capacitor/ios": "^8.3.0",
+    "clsx": "^2.1.1",
+    "dotenv": "^17.4.1",
+    "framer-motion": "^12.38.0",
+    "lucide-react": "latest",
+    "next": "latest",
+    "nodemailer": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "tailwind-merge": "^3.5.0",
+    "telegraf": "latest"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
