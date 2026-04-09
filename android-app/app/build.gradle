@@ -14,11 +14,20 @@ android {
         versionName "1.0.0"
     }
 
+    signingConfigs {
+        release {
+            storeFile file("../../../primuslugi-release.keystore")
+            storePassword "primuslugi2024"
+            keyAlias "primuslugi"
+            keyPassword "primuslugi2024"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            // Signing config will be added when keystore is ready
         }
         debug {
             applicationIdSuffix ".debug"
