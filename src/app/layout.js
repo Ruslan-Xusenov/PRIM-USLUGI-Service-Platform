@@ -121,10 +121,13 @@ export default function RootLayout({ children }) {
                 animate={{ x: 0 }}
                 exit={{ x: '-100%' }}
                 transition={{ type: 'tween', duration: 0.4, ease: 'easeOut' }}
-                className="fixed inset-0 z-[9999] bg-[#030712] content-overlay md:hidden"
-                style={{ backgroundColor: '#030712' }}
+                className="fixed inset-0 z-[9999] bg-[#030712] md:hidden overflow-hidden"
               >
-                <div className="flex flex-col h-full">
+                {/* Opaque Background Layer */}
+                <div className="absolute inset-0 bg-[#030712] z-[-1]" />
+                <div className="absolute inset-0 bg-drawer-grid opacity-40 z-[-1]" />
+                
+                <div className="flex flex-col h-full relative z-10">
                   {/* Drawer Header */}
                   <div className="flex items-center justify-between p-6 border-b border-white/5 bg-black/20">
                     <button onClick={() => setMobileMenuOpen(false)} className="text-white/60 hover:text-white transition-colors">
