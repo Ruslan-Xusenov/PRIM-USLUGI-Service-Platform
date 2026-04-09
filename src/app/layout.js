@@ -13,6 +13,11 @@ const montserrat = Montserrat({ subsets: ['latin', 'cyrillic'], variable: '--fon
 export default function RootLayout({ children }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -44,8 +49,8 @@ export default function RootLayout({ children }) {
         {/* Navigation */}
         <header 
           className={`fixed top-0 left-0 right-0 z-1000 transition-all duration-700 ${
-            isScrolled ? 'py-2' : 'py-5'
-          }`}
+            (mounted && mobileMenuOpen) ? 'hidden' : 'block'
+          } ${isScrolled ? 'py-2' : 'py-5'}`}
         >
           <div className="container">
             <nav 
@@ -138,8 +143,9 @@ export default function RootLayout({ children }) {
                     </Link>
                     <button 
                       onClick={() => setMobileMenuOpen(false)} 
-                      className="bg-white/10 p-3 rounded-2xl text-white hover:bg-white/20 transition-all active:scale-90"
+                      className="bg-white/10 p-4 rounded-2xl text-white hover:bg-white/20 transition-all active:scale-90"
                       style={{ cursor: 'pointer', pointerEvents: 'auto' }}
+                      aria-label="Close menu"
                     >
                       <X size={28} />
                     </button>
@@ -201,11 +207,11 @@ export default function RootLayout({ children }) {
           )}
         </AnimatePresence>
 
-        <main>
+        <main className={`${(mounted && mobileMenuOpen) ? 'hidden' : 'block'}`}>
           {children}
         </main>
 
-        <footer className="bg-footer pt-24 pb-12 text-white overflow-hidden relative">
+        <footer className={`bg-footer pt-24 pb-12 text-white overflow-hidden relative ${(mounted && mobileMenuOpen) ? 'hidden' : 'block'}`}>
           <div className="shape-blob -top-24 -right-24"></div>
           
           <div className="container">
