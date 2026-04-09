@@ -44,8 +44,8 @@ export default function RootLayout({ children }) {
         {/* Navigation */}
         <header 
           className={`fixed top-0 left-0 right-0 z-1000 transition-all duration-700 ${
-            isScrolled ? 'py-2' : 'py-5'
-          }`}
+            mobileMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          } ${isScrolled ? 'py-2' : 'py-5'}`}
         >
           <div className="container">
             <nav 
@@ -129,12 +129,15 @@ export default function RootLayout({ children }) {
                 
                 <div className="flex flex-col h-full relative z-10">
                   {/* Drawer Header */}
-                  <div className="flex items-center justify-between p-6 border-b border-white/5 bg-black/20">
-                    <button onClick={() => setMobileMenuOpen(false)} className="text-white/60 hover:text-white transition-colors">
-                      <ChevronLeft size={28} />
-                    </button>
-                    <button onClick={() => setMobileMenuOpen(false)} className="text-white/60 hover:text-white transition-colors">
-                      <X size={28} />
+                  <div className="flex items-center justify-between p-6 border-b border-white/5 bg-black/40">
+                    <Link href="/" className="flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                      <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center p-1">
+                        <img src="/images/logo_premium.png" alt="Logo" className="w-6 h-6 object-contain" />
+                      </div>
+                      <span className="text-white font-bold tracking-tight">PRIM-USLUGI</span>
+                    </Link>
+                    <button onClick={() => setMobileMenuOpen(false)} className="bg-white/10 p-2 rounded-xl text-white hover:bg-white/20 transition-colors">
+                      <X size={24} />
                     </button>
                   </div>
 
@@ -194,7 +197,9 @@ export default function RootLayout({ children }) {
           )}
         </AnimatePresence>
 
-        <main>{children}</main>
+        <main className={`${mobileMenuOpen ? 'hidden md:block' : 'block'}`}>
+          {children}
+        </main>
 
         <footer className="bg-footer pt-24 pb-12 text-white overflow-hidden relative">
           <div className="shape-blob -top-24 -right-24"></div>
