@@ -110,32 +110,34 @@ export default function MediaLibrary() {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
             {filteredMedia.map((item, index) => (
-              <div key={index} className="group relative bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 aspect-square">
-                <img 
-                  src={item.url} 
-                  alt={item.name} 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3">
-                  <div className="flex gap-2">
+              <div key={index} className="group flex flex-col bg-slate-50 rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                <div className="relative aspect-square overflow-hidden bg-white">
+                  <img 
+                    src={item.url} 
+                    alt={item.name} 
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-3 bg-white border-t border-slate-100 flex items-center justify-between gap-2">
+                  <div className="truncate text-[10px] font-semibold text-slate-400" title={item.name}>
+                    {item.name.length > 15 ? item.name.substring(0, 15) + '...' : item.name}
+                  </div>
+                  <div className="flex gap-1">
                     <button 
                       onClick={() => copyToClipboard(item.url, index)}
-                      className="p-3 bg-white text-slate-900 rounded-xl hover:bg-accent hover:text-white transition-all shadow-xl active:scale-90"
-                      title="Копировать ссылку"
+                      className="p-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-accent hover:text-white transition-all active:scale-90"
+                      title="Копировать ссылку (URL)"
                     >
-                      {copiedIndex === index ? <Check size={20} /> : <Copy size={20} />}
+                      {copiedIndex === index ? <Check size={16} /> : <Copy size={16} />}
                     </button>
                     <button 
                       onClick={() => deleteImage(item.name)}
-                      className="p-3 bg-white text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-xl active:scale-90"
-                      title="Удалить"
+                      className="p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all active:scale-90"
+                      title="Удалить навсегда"
                     >
-                      <Trash2 size={20} />
+                      <Trash2 size={16} />
                     </button>
                   </div>
-                  <span className="text-[9px] text-white font-bold bg-black/40 px-2 py-1 rounded uppercase tracking-widest truncate max-w-[80%]">
-                    {item.name}
-                  </span>
                 </div>
               </div>
             ))}

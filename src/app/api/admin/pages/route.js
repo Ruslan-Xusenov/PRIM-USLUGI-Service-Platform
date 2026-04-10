@@ -18,7 +18,7 @@ export async function POST(request) {
     // Check if URL exists
     const existing = db.prepare('SELECT id FROM pages WHERE url = ?').get(url);
     if (existing) {
-      return NextResponse.json({ error: 'Bu URL allaqachon mavjud' }, { status: 400 });
+      return NextResponse.json({ error: 'Данный URL уже существует. Выберите другой.' }, { status: 400 });
     }
 
     const info = db.prepare(`

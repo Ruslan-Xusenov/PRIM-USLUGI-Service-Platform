@@ -21,7 +21,7 @@ export async function PUT(request, { params }) {
     // Check if new URL conflicts with other pages
     const conflict = db.prepare('SELECT id FROM pages WHERE url = ? AND id != ?').get(url, id);
     if (conflict) {
-      return NextResponse.json({ error: 'Bu URL boshqa sahifa uchun band' }, { status: 400 });
+      return NextResponse.json({ error: 'Этот URL уже занят другой страницей. Выберите другой.' }, { status: 400 });
     }
 
     db.prepare(`

@@ -305,3 +305,38 @@ img { max-width: 100%; height: auto; display: block; }
   .lg\:grid-4 { grid-template-columns: repeat(4, 1fr); }
   .lg\:col-span-1 { grid-column: span 1 / span 1; }
 }
+
+/* Dynamic Content Rendering Override (Prose) */
+.prose {
+  color: #f8fafc;
+}
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  color: #ffffff;
+  font-weight: 700;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+.prose p {
+  color: #e2e8f0;
+  margin-bottom: 1em;
+  line-height: 1.7;
+}
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose ul, .prose ol {
+  color: #e2e8f0;
+  margin-bottom: 1em;
+  padding-left: 1.5em;
+}
+.prose ul { list-style-type: disc; }
+.prose ol { list-style-type: decimal; }
+.prose strong { color: #ffffff; }
+.prose img {
+  border-radius: 1rem;
+  box-shadow: var(--shadow-hover);
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
