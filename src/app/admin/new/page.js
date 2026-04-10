@@ -22,10 +22,10 @@ export default function NewPage() {
         router.push('/admin');
         router.refresh();
       } else {
-        alert(data.error || 'Xatolik yuz berdi');
+        alert(data.error || 'Произошла ошибка');
       }
     } catch (error) {
-      alert('Server bilan bog\'lanishda xatolik');
+      alert('Ошибка соединения с сервером');
     } finally {
       setIsSubmitting(false);
     }
@@ -34,8 +34,8 @@ export default function NewPage() {
   return (
     <AdminLayout>
       <div className="mb-10">
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight">Yangi sahifa yaratish</h1>
-        <p className="text-slate-500 mt-1">Saytingiz uchun yangi bo'lim va kontent qo'shing</p>
+        <h1 className="text-3xl font-black text-slate-900 tracking-tight">Создание новой страницы</h1>
+        <p className="text-slate-500 mt-1">Добавьте новый раздел и контент для вашего сайта</p>
       </div>
 
       <PageEditor onSave={handleSave} isSubmitting={isSubmitting} />

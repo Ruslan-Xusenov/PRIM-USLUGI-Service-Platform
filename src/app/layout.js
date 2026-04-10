@@ -3,6 +3,7 @@ import './globals.css';
 import { Outfit, Montserrat } from 'next/font/google';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { Phone, Mail, Clock, Shield, Menu, X, ArrowRight, ChevronRight, ChevronLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Script from 'next/script';
@@ -14,6 +15,9 @@ export default function RootLayout({ children }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  
+  const pathname = usePathname();
+  const isAdmin = pathname?.startsWith('/admin');
 
   useEffect(() => {
     setMounted(true);
@@ -49,7 +53,7 @@ export default function RootLayout({ children }) {
         {/* Navigation */}
         <header 
           className={`fixed top-0 left-0 right-0 z-1000 transition-all duration-700 ${
-            (mounted && mobileMenuOpen) ? 'hidden' : 'block'
+            (mounted && mobileMenuOpen) || isAdmin ? 'hidden' : 'block'
           } ${isScrolled ? 'py-2' : 'py-5'}`}
         >
           <div className="container">
@@ -104,7 +108,7 @@ export default function RootLayout({ children }) {
 
         {/* Mobile Side Drawer Menu */}
         <AnimatePresence>
-          {mobileMenuOpen && (
+          {mobileMenuOpen && !isAdmin && (
             <>
               {/* Backdrop */}
               <motion.div 
@@ -206,7 +210,7 @@ export default function RootLayout({ children }) {
           {children}
         </main>
 
-        <footer className={`bg-footer pt-24 pb-12 text-white overflow-hidden relative ${(mounted && mobileMenuOpen) ? 'hidden' : 'block'}`}>
+        <footer className={`bg-footer pt-24 pb-12 text-white overflow-hidden relative ${(mounted && mobileMenuOpen) || isAdmin ? 'hidden' : 'block'}`}>
           <div className="shape-blob -top-24 -right-24"></div>
           
           <div className="container">
@@ -288,12 +292,14 @@ export default function RootLayout({ children }) {
         </footer>
 
         {/* Floating Call Button for Mobile */}
-        <a 
-          href="tel:+79998887766" 
-          className="fixed bottom-6 right-6 w-16 h-16 bg-accent text-white rounded-full shadow-2xl flex items-center justify-center z-900 md:hidden animate-bounce"
-        >
-          <Phone size={24} />
-        </a>
+        {!isAdmin && (
+          <a 
+            href="tel:+79998887766" 
+            className="fixed bottom-6 right-6 w-16 h-16 bg-accent text-white rounded-full shadow-2xl flex items-center justify-center z-900 md:hidden animate-bounce"
+          >
+            <Phone size={24} />
+          </a>
+        )}
 
         {/* Yandex Metrica */}
         <Script id="yandex-metrika" strategy="afterInteractive">

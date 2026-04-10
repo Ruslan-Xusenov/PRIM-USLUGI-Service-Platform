@@ -19,7 +19,7 @@ export default function EditPage() {
         if (res.ok) {
           setPageData(data);
         } else {
-          alert('Sahifa topilmadi');
+          alert('Страница не найдена');
           router.push('/admin');
         }
       } catch (error) {
@@ -45,10 +45,10 @@ export default function EditPage() {
         router.push('/admin');
         router.refresh();
       } else {
-        alert(data.error || 'Xatolik yuz berdi');
+        alert(data.error || 'Произошла ошибка');
       }
     } catch (error) {
-      alert('Server bilan bog\'lanishda xatolik');
+      alert('Ошибка соединения с сервером');
     } finally {
       setIsSubmitting(false);
     }
@@ -57,12 +57,12 @@ export default function EditPage() {
   return (
     <AdminLayout>
       <div className="mb-10">
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight">Sahifani tahrirlash</h1>
-        <p className="text-slate-500 mt-1">Mavjud sahifa kontenti va SEO sozlamalarini o'zgartiring</p>
+        <h1 className="text-3xl font-black text-slate-900 tracking-tight">Редактирование страницы</h1>
+        <p className="text-slate-500 mt-1">Измените содержимое и SEO настройки существующей страницы</p>
       </div>
 
       {loading ? (
-        <div className="bg-white p-20 text-center rounded-[2.5rem] shadow-sm text-slate-400 font-bold">Yuklanmoqda...</div>
+        <div className="bg-white p-20 text-center rounded-[2.5rem] shadow-sm text-slate-400 font-bold">Загрузка...</div>
       ) : (
         <PageEditor initialData={pageData} onSave={handleSave} isSubmitting={isSubmitting} />
       )}

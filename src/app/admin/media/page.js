@@ -42,10 +42,10 @@ export default function MediaLibrary() {
       if (res.ok) {
         fetchMedia();
       } else {
-        alert('Yuklashda xatolik yuz berdi');
+        alert('Ошибка при загрузке');
       }
     } catch (error) {
-      alert('Xatolik yuz berdi');
+      alert('Произошла ошибка при загрузке');
     } finally {
       setIsUploading(false);
     }
@@ -63,12 +63,12 @@ export default function MediaLibrary() {
     <AdminLayout>
       <div className="flex justify-between items-center mb-10">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Media kutubxonasi</h1>
-          <p className="text-slate-500 mt-1">Rasmlarni yuklang va boshqaring</p>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Медиатека</h1>
+          <p className="text-slate-500 mt-1">Загружайте и управляйте изображениями</p>
         </div>
         <label className={`flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-2xl font-bold shadow-lg transition-all cursor-pointer active:scale-95 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
           <Upload size={20} />
-          <span>{isUploading ? 'Yuklanmoqda...' : 'Rasm yuklash'}</span>
+          <span>{isUploading ? 'Загрузка...' : 'Загрузить фото'}</span>
           <input type="file" className="hidden" onChange={handleUpload} accept="image/*" />
         </label>
       </div>
@@ -78,7 +78,7 @@ export default function MediaLibrary() {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <input 
             type="text" 
-            placeholder="Rasmlardan qidiruv..." 
+            placeholder="Поиск изображений..." 
             className="w-full pl-12 pr-6 py-3 rounded-xl border border-slate-100 focus:border-accent outline-none bg-slate-50/50 font-medium"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -86,12 +86,12 @@ export default function MediaLibrary() {
         </div>
 
         {loading ? (
-          <div className="p-20 text-center text-slate-400 font-bold">Yuklanmoqda...</div>
+          <div className="p-20 text-center text-slate-400 font-bold">Загрузка...</div>
         ) : filteredMedia.length === 0 ? (
           <div className="p-20 text-center border-2 border-dashed border-slate-100 rounded-[2rem]">
             <ImageIcon size={48} className="mx-auto text-slate-200 mb-4" />
-            <p className="text-slate-400 font-bold tracking-tight text-lg">Hali media fayllar yo'q</p>
-            <p className="text-slate-300 text-sm mt-1">Birinchi rasmni tepadi tugma orqali yuklang</p>
+            <p className="text-slate-400 font-bold tracking-tight text-lg">Нет медиафайлов</p>
+            <p className="text-slate-300 text-sm mt-1">Загрузите первое изображение с помощью кнопки сверху</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
@@ -106,7 +106,7 @@ export default function MediaLibrary() {
                   <button 
                     onClick={() => copyToClipboard(item.url, index)}
                     className="p-3 bg-white text-slate-900 rounded-xl hover:bg-accent hover:text-white transition-all shadow-xl active:scale-90"
-                    title="Havolani nusxalash"
+                    title="Копировать ссылку"
                   >
                     {copiedIndex === index ? <Check size={20} /> : <Copy size={20} />}
                   </button>
@@ -125,10 +125,10 @@ export default function MediaLibrary() {
           <Copy size={20} />
         </div>
         <div>
-          <h4 className="font-bold text-slate-900 mb-1">Maslahat: Rasmlardan foydalanish</h4>
+          <h4 className="font-bold text-slate-900 mb-1">Совет: Использование изображений</h4>
           <p className="text-slate-500 text-sm leading-relaxed">
-            Rasm yuklagandan so'ng, uning ustiga qonchani olib boring va <b>nusxalash</b> belgisini bosing. 
-            Keyin sahifa tahrirlovchisida (Rich Text Editor) rasm qo'shish tugmasini bosib, ushbu manzilni kiriting.
+            После загрузки изображения наведите на него курсор и нажмите иконку <b>скопировать</b>. 
+            Затем в визуальном редакторе страниц нажмите кнопку добавления картинки и вставьте скопированный URL.
           </p>
         </div>
       </div>
