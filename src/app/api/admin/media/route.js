@@ -26,3 +26,21 @@ export async function GET() {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+export async function DELETE(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const filename = searchParams.get('file');
+
+    if (!filename) {
+      return NextResponse.json({ error: 'File name is required' }, { status: 400 });
+    }
+
+    const filePath = path.join(process.cwd(), 'public', 'uploads', filename);
+    await fs.unlink(filePath);
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}

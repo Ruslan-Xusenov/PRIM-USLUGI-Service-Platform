@@ -33,13 +33,24 @@ export default function PageEditor({ initialData = {}, onSave, isSubmitting }) {
   };
 
   const modules = useMemo(() => ({
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      ['link', 'image', 'video'],
-      ['clean'],
-    ],
+    toolbar: {
+      container: [
+        [{ header: [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['link', 'image', 'video'],
+        ['clean'],
+      ],
+      handlers: {
+        image: function () {
+          const url = window.prompt("Введите URL изображения (скопированный из Медиатеки):");
+          if (url) {
+            const range = this.quill.getSelection() || { index: this.quill.getLength() };
+            this.quill.insertEmbed(range.index, 'image', url, 'user');
+          }
+        }
+      }
+    }
   }), []);
 
   return (

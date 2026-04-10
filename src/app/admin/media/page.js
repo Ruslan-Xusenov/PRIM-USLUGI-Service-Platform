@@ -57,6 +57,20 @@ export default function MediaLibrary() {
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
+  const deleteImage = async (filename) => {
+    if (!confirm('Вы действительно хотите удалить это изображение?')) return;
+    try {
+      const res = await fetch(`/api/admin/media?file=${encodeURIComponent(filename)}`, { method: 'DELETE' });
+      if (res.ok) {
+        fetchMedia();
+      } else {
+        alert('Ошибка при удалении');
+      }
+    } catch (error) {
+      alert('Произошла ошибка');
+    }
+  };
+
   const filteredMedia = media.filter(m => m.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
@@ -103,13 +117,22 @@ export default function MediaLibrary() {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3">
-                  <button 
-                    onClick={() => copyToClipboard(item.url, index)}
-                    className="p-3 bg-white text-slate-900 rounded-xl hover:bg-accent hover:text-white transition-all shadow-xl active:scale-90"
-                    title="Копировать ссылку"
-                  >
-                    {copiedIndex === index ? <Check size={20} /> : <Copy size={20} />}
-                  </button>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => copyToClipboard(item.url, index)}
+                      className="p-3 bg-white text-slate-900 rounded-xl hover:bg-accent hover:text-white transition-all shadow-xl active:scale-90"
+                      title="Копировать ссылку"
+                    >
+                      {copiedIndex === index ? <Check size={20} /> : <Copy size={20} />}
+                    </button>
+                    <button 
+                      onClick={() => deleteImage(item.name)}
+                      className="p-3 bg-white text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-xl active:scale-90"
+                      title="Удалить"
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  </div>
                   <span className="text-[9px] text-white font-bold bg-black/40 px-2 py-1 rounded uppercase tracking-widest truncate max-w-[80%]">
                     {item.name}
                   </span>
