@@ -21,6 +21,7 @@
     "react": "latest",
     "react-dom": "latest",
     "react-quill": "^2.0.0",
+    "react-quill-new": "^3.8.3",
     "tailwind-merge": "^3.5.0",
     "telegraf": "latest"
   },

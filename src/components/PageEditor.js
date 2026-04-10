@@ -1,19 +1,19 @@
 'use client';
 import { useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import 'react-quill/dist/quill.snow.css';
+import 'react-quill-new/dist/quill.snow.css';
 import { Save, Globe, Search, Image as ImageIcon, AlertCircle } from 'lucide-react';
 
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 
 export default function PageEditor({ initialData = {}, onSave, isSubmitting }) {
   const [formData, setFormData] = useState({
-    url: initialData.url || '',
-    title: initialData.title || '',
-    content: initialData.content || '',
-    seo_title: initialData.seo_title || '',
-    seo_description: initialData.seo_description || '',
-    seo_keywords: initialData.seo_keywords || '',
+    url: initialData?.url || '',
+    title: initialData?.title || '',
+    content: initialData?.content || '',
+    seo_title: initialData?.seo_title || '',
+    seo_description: initialData?.seo_description || '',
+    seo_keywords: initialData?.seo_keywords || '',
   });
 
   const [activeTab, setActiveTab] = useState('content'); // 'content' or 'seo'
