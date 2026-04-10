@@ -1,0 +1,87 @@
+name: 🤖 Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:  # Qo'lda ham ishga tushirish mumkin
+
+jobs:
+  build-android:
+    name: Build Debug & Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ✅ Checkout code
+        uses: actions/checkout@v4
+
+      - name: ☕ Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: 📱 Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: 🔑 Decode Keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android-app/primuslugi-release.keystore
+        continue-on-error: true
+
+      - name: 📝 Make gradlew executable
+        run: |
+          cd android-app
+          chmod +x gradlew 2>/dev/null || true
+
+      - name: 🛠️ Build Debug APK
+        run: |
+          cd android-app
+          gradle assembleDebug --no-daemon --stacktrace
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+
+      - name: 📦 Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: prim-uslugi-debug-apk
+          path: android-app/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+
+      - name: 🚀 Build Release APK
+        run: |
+          cd android-app
+          gradle assembleRelease --no-daemon --stacktrace
+        continue-on-error: true
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+
+      - name: 📦 Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: prim-uslugi-release-apk
+          path: android-app/app/build/outputs/apk/release/app-release.apk
+          retention-days: 30
+        continue-on-error: true
+
+      - name: 🎉 Create GitHub Release
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: "Prim-Uslugi v1.0.${{ github.run_number }}"
+          body: |
+            ## 📱 Prim-Uslugi Android App
+            
+            ### O'rnatish
+            1. `prim-uslugi-debug.apk` ni yuklab oling
+            2. Telefoningizga o'tkazing
+            3. O'rnatish uchun **"Noma'lum manbalardan o'rnatish"**ni yoqing
+            4. Faylni oching va o'rnating
+            
+            ### Texnik ma'lumot
+            - Minimum Android: 5.0+
+            - Sayt: https://rimuslugi.vercel.app
+          files: |
+            android-app/app/build/outputs/apk/debug/app-debug.apk
+          token: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
