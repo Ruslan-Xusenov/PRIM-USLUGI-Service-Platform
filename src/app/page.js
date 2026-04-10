@@ -82,56 +82,74 @@ export default function Home() {
   return (
     <div className="overflow-x-hidden">
       {/* Hero Section - now works with global background */}
-      <section className="relative hero-height flex items-center overflow-hidden">
-        {/* Local background removed to show global bridge background */}
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden pt-32 md:pt-40 pb-24">
         <div className="container relative z-10 px-6">
-          <motion.div 
-            initial="hidden"
-            animate="show"
-            variants={stagger}
-            className="max-w-3xl"
-          >
-            <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-6">
-              <span className="w-12 h-px bg-accent"></span>
-              <span className="text-accent font-bold uppercase tracking-[0.3em] text-xs">Лидеры рынка Приморья</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+            {/* Left Content */}
+            <motion.div 
+              initial="hidden"
+              animate="show"
+              variants={stagger}
+              className="lg:col-span-7"
+            >
+              <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-8">
+                <span className="w-12 h-px bg-accent"></span>
+                <span className="text-accent font-bold uppercase tracking-[0.3em] text-xs">Лидеры рынка Приморья</span>
+              </motion.div>
+              
+              <motion.h1 
+                variants={fadeInUp} 
+                className="text-white text-5xl md:text-7xl mb-8 leading-[1.1] font-extrabold tracking-tight mt-8"
+              >
+                Сервис нового <br /> 
+                <span className="text-gradient">поколения</span>
+              </motion.h1>
+              
+              <motion.p variants={fadeInUp} className="text-lg md:text-xl text-grey-400 mb-12 max-w-xl leading-relaxed">
+                Мы объединили лучшие практики логистики и экстренной помощи, чтобы обеспечить вам максимальную надежность во Владивостоке и по всему краю.
+              </motion.p>
+              
+              <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
+                <Link href="#contact" className="btn btn-accent px-8 py-4 text-white">
+                  Заказать услугу <ArrowRight size={18} className="ml-2" />
+                </Link>
+                <a href="tel:+79998887766" className="btn btn-primary bg-white/5 backdrop-blur-md border border-white/10 text-white hover:bg-white/10">
+                  <Phone size={18} className="mr-2 text-accent" /> +7 (999) 888-77-66
+                </a>
+              </motion.div>
             </motion.div>
-            
-            <motion.h1 variants={fadeInUp} className="text-white text-5xl md:text-7xl mb-8 leading-[1.1] font-extrabold tracking-tight">
-              Сервис нового <br /> 
-              <span className="text-gradient">поколения</span>
-            </motion.h1>
-            
-            <motion.p variants={fadeInUp} className="text-lg md:text-xl text-grey-400 mb-12 max-w-xl leading-relaxed">
-              Мы объединили лучшие практики логистики и экстренной помощи, чтобы обеспечить вам максимальную надежность во Владивостоке и по всему краю.
-            </motion.p>
-            
-            <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
-              <Link href="#contact" className="btn btn-accent px-8 py-4 text-white">
-                Заказать услугу <ArrowRight size={18} className="ml-2" />
-              </Link>
-              <a href="tel:+79998887766" className="btn btn-primary bg-white/5 backdrop-blur-md border border-white/10 text-white hover:bg-white/10">
-                <Phone size={18} className="mr-2 text-accent" /> +7 (999) 888-77-66
-              </a>
-            </motion.div>
-          </motion.div>
-        </div>
 
-        {/* Floating Stats */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 hidden lg:block">
-          <div className="container">
-            <div className="grid grid-3 glass-dark border-none rounded-t-[3rem] p-12 gap-8 text-white max-w-4xl">
-              {stats.map((stat, i) => (
-                <div key={i} className="flex items-center gap-6">
-                  <div className="w-12 h-12 rounded-2xl bg-accent/20 flex items-center justify-center text-accent">
-                    {stat.icon}
+            {/* Right Stats (Desktop) */}
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="lg:col-span-1 hidden lg:block"
+            >
+              {/* Spacer empty column to push stats further right */}
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="lg:col-span-4 hidden lg:block"
+            >
+              <div className="glass-dark border-white/5 rounded-[3rem] p-12 space-y-12 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                {stats.map((stat, i) => (
+                  <div key={i} className="flex items-center gap-8 group">
+                    <div className="w-20 h-20 rounded-3xl bg-accent/15 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all duration-500 shadow-xl shadow-accent/5">
+                      {stat.icon && <stat.icon.type {...stat.icon.props} size={32} />}
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <span className="text-5xl font-black block text-white tracking-tighter">{stat.value}</span>
+                      <span className="text-xs text-accent font-bold uppercase tracking-[0.3em] opacity-80">{stat.label}</span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="text-3xl font-bold block text-white">{stat.value}</span>
-                    <span className="text-xs text-white font-bold uppercase tracking-widest">{stat.label}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>

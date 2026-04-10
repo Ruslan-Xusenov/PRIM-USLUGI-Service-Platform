@@ -9,18 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@capacitor/android": "^8.3.0",
-    "@capacitor/cli": "^8.3.0",
-    "@capacitor/core": "^8.3.0",
-    "@capacitor/ios": "^8.3.0",
+    "better-sqlite3": "^12.8.0",
     "clsx": "^2.1.1",
     "dotenv": "^17.4.1",
     "framer-motion": "^12.38.0",
+    "fs-extra": "^11.3.4",
     "lucide-react": "latest",
     "next": "latest",
     "nodemailer": "latest",
+    "quill": "^2.0.3",
     "react": "latest",
     "react-dom": "latest",
+    "react-quill": "^2.0.0",
     "tailwind-merge": "^3.5.0",
     "telegraf": "latest"
   },

@@ -62,9 +62,9 @@ export default function RootLayout({ children }) {
                 <div className="relative w-12 h-12 overflow-hidden rounded-xl bg-white flex items-center justify-center transition-transform group-hover:scale-105 shadow-sm border border-grey-100">
                    <img src="/images/logo_premium.png" alt="Prim-Uslugi Logo" className="w-10 h-10 object-contain" />
                 </div>
-                <div className="flex flex-col">
-                  <span className={`text-lg sm:text-xl font-extrabold tracking-tight leading-none transition-colors text-white`}>PRIM-USLUGI</span>
-                  <span className={`text-[9px] uppercase tracking-[0.2em] font-bold transition-all text-accent hidden md:block`}>Service Platform</span>
+                <div className="flex items-center gap-3">
+                  <span className={`text-xl font-extrabold tracking-tight transition-colors text-white`}>PRIM-USLUGI</span>
+                  <span className={`text-[10px] uppercase tracking-[0.2em] font-bold transition-all text-accent hidden lg:block border-l border-white/20 pl-3`}>Service Platform</span>
                 </div>
               </Link>
 
@@ -85,22 +85,17 @@ export default function RootLayout({ children }) {
               <div className="flex items-center gap-4">
                 <a 
                   href="tel:+79998887766" 
-                  className={`hidden lg:flex items-center gap-2 font-bold transition-colors text-white`}
+                  className={`hidden lg:flex items-center gap-2 font-bold transition-colors text-white hover:text-accent`}
                 >
                   <Phone size={18} className="text-accent" />
                   <span>+7 (999) 888-77-66</span>
                 </a>
-                 <Link 
-                  href="#contact" 
-                  className="btn btn-primary px-6 py-2.5 text-sm hidden lg:flex"
-                >
-                  Заказать услугу
-                </Link>
                 <button 
-                  className={`md:hidden p-2 rounded-xl transition-colors text-white`}
+                  className={`flex md:hidden p-3 rounded-2xl bg-white/5 border border-white/10 text-white hover:bg-white/10 active:scale-95 transition-all shadow-lg backdrop-blur-md`}
                   onClick={() => setMobileMenuOpen(true)}
+                  aria-label="Toggle menu"
                 >
-                  <Menu size={28} />
+                  <Menu size={24} />
                 </button>
               </div>
             </nav>
