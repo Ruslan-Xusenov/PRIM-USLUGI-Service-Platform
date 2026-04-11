@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import 'react-quill-new/dist/quill.snow.css';
 import { Save, Globe, Search, Image as ImageIcon, AlertCircle } from 'lucide-react';
+import MediaPicker from './MediaPicker';
 
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 
@@ -17,6 +18,8 @@ export default function PageEditor({ initialData = {}, onSave, isSubmitting }) {
   });
 
   const [activeTab, setActiveTab] = useState('content'); // 'content' or 'seo'
+  const [isMediaPickerOpen, setIsMediaPickerOpen] = useState(false);
+  const [quillRef, setQuillRef] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,11 +46,9 @@ export default function PageEditor({ initialData = {}, onSave, isSubmitting }) {
       ],
       handlers: {
         image: function () {
-          const url = window.prompt("Введите URL изображения (скопированный из Медиатеки):");
-          if (url) {
-            const range = this.quill.getSelection() || { index: this.quill.getLength() };
-            this.quill.insertEmbed(range.index, 'image', url, 'user');
-          }
+          // Store the quill instance to use it when an image is selected
+          window.quillForMedia = this.quill;
+          document.getElementById('open-media-picker-btn').click();
         }
       }
     }
@@ -120,16 +121,45 @@ export default function PageEditor({ initialData = {}, onSave, isSubmitting }) {
                 <p className="text-[10px] text-slate-400 px-1 italic">Внимание: Используйте только английские буквы и дефисы (-).</p>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest px-1">Содержимое страницы</label>
-                <div className="h-[500px] overflow-hidden rounded-2xl border-2 border-slate-100">
+                <div className="rounded-2xl border-2 border-slate-100 bg-white min-h-[500px] overflow-visible">
+                  <style jsx global>{`
+                    .ql-toolbar.ql-snow {
+                      border: none !important;
+                      border-bottom: 1px solid #f1f5f9 !important;
+                      padding: 1rem !important;
+                      background: #fafafa;
+                      border-top-left-radius: 1rem;
+                      border-top-right-radius: 1rem;
+                      position: sticky;
+                      top: 0;
+                      z-index: 10;
+                    }
+                    .ql-container.ql-snow {
+                      border: none !important;
+                      min-height: 400px;
+                      font-family: inherit;
+                      font-size: 1rem;
+                    }
+                    .ql-editor {
+                      padding: 2rem !important;
+                      min-height: 400px;
+                    }
+                  `}</style>
                   <ReactQuill 
                     theme="snow" 
                     value={formData.content} 
                     onChange={handleEditorChange}
                     modules={modules}
-                    style={{ height: '444px' }}
                   />
+                  {/* Hidden button to trigger MediaPicker from Quill handler */}
+                  <button 
+                    id="open-media-picker-btn" 
+                    type="button" 
+                    className="hidden" 
+                    onClick={() => setIsMediaPickerOpen(true)}
+                  ></button>
                 </div>
               </div>
             </div>
@@ -202,8 +232,20 @@ export default function PageEditor({ initialData = {}, onSave, isSubmitting }) {
           </div>
         </div>
       </div>
+      <MediaPicker 
+        isOpen={isMediaPickerOpen} 
+        onClose={() => setIsMediaPickerOpen(false)} 
+        onSelect={(url) => {
+          const quill = window.quillForMedia;
+          if (quill) {
+            const range = quill.getSelection() || { index: quill.getLength() };
+            quill.insertEmbed(range.index, 'image', url, 'user');
+          }
+        }}
+      />
     </form>
   );
 }
+
 
 import Link from 'next/link';

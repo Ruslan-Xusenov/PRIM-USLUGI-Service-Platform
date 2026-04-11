@@ -74,9 +74,15 @@ export default function ServicePage({ title, description, details, icon, image }
                <h3 className="text-2xl font-bold mb-4 relative z-10">Нужна оперативная помощь?</h3>
                <p className="text-grey-400 mb-8 relative z-10 max-w-sm">Наши дежурные бригады готовы к выезду прямо сейчас. Свяжитесь с нами для моментального расчета стоимости.</p>
                <div className="flex flex-wrap gap-4 relative z-10">
-                 <a href="tel:+79998887766" className="btn btn-accent px-8">
+                 {/* Desktop version (no tel link to avoid error) */}
+                 <div className="hidden lg:flex items-center btn btn-accent px-8 cursor-default">
+                   <Phone size={18} className="mr-2" /> +7 (999) 888-77-66
+                 </div>
+                 {/* Mobile version (active tel link) */}
+                 <a href="tel:+79998887766" className="flex lg:hidden items-center btn btn-accent px-8">
                    <Phone size={18} className="mr-2" /> Позвонить
                  </a>
+                 
                  <Link href="#contact" className="btn bg-white/5 border border-white/10 text-white hover:bg-white/10">
                     Оставить заявку
                  </Link>

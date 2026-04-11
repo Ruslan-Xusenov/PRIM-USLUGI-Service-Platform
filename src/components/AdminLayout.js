@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { LayoutDashboard, FilePlus, Image, Home, LogOut, Settings } from 'lucide-react';
+import { LayoutDashboard, FilePlus, Image, Home, LogOut, Newspaper } from 'lucide-react';
 
 export default function AdminLayout({ children }) {
   return (
@@ -30,17 +30,17 @@ export default function AdminLayout({ children }) {
             <Image size={20} className="group-hover:text-accent transition-colors" />
             <span className="font-semibold">Медиатека</span>
           </Link>
+          <Link href="/admin/news" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-all text-slate-300 hover:text-white group">
+            <Newspaper size={20} className="group-hover:text-accent transition-colors" />
+            <span className="font-semibold">Новости</span>
+          </Link>
         </nav>
 
-        <div className="p-6 border-t border-slate-800 space-y-2">
+        <div className="p-6 border-t border-slate-800">
           <Link href="/" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-all text-slate-400 hover:text-white group">
             <Home size={18} />
             <span className="text-sm font-medium">Вернуться на сайт</span>
           </Link>
-          <button className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-500/10 transition-all text-slate-400 hover:text-red-400 group w-full text-left">
-            <LogOut size={18} />
-            <span className="text-sm font-medium">Выйти</span>
-          </button>
         </div>
       </aside>
 
