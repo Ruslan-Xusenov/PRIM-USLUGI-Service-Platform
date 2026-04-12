@@ -14,22 +14,29 @@ export default function ServicePage({ title, description, details, icon, image, 
     <div className="bg-bg-main">
       {/* Dynamic Header */}
       <section 
-        className={`relative pt-48 pb-32 overflow-hidden ${bgImage || bgMobileImage ? 'header-custom-bg' : ''}`}
-        style={bgImage ? {
-          backgroundImage: `linear-gradient(rgba(6, 12, 26, 0.6), rgba(6, 12, 26, 0.95)), url('${bgImage}')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        } : {}}
+        className="relative pt-48 pb-32 overflow-hidden"
       >
         {(bgImage || bgMobileImage) && (
           <style dangerouslySetInnerHTML={{__html: `
+            ${bgImage ? `
+            @media (min-width: 769px) {
+              body::before {
+                background-image: url('${bgImage}') !important;
+              }
+            }
+            ` : ''}
             ${bgMobileImage ? `
             @media (max-width: 768px) {
-              .header-custom-bg {
-                background-image: linear-gradient(rgba(6, 12, 26, 0.6), rgba(6, 12, 26, 0.95)), url('${bgMobileImage}') !important;
-                background-size: cover;
-                background-position: center;
+              body::before {
+                background-image: url('${bgMobileImage}') !important;
+              }
+            }
+            ` : ''}
+            /* Fallback for bgImage on mobile if mobile version is not provided */
+            ${bgImage && !bgMobileImage ? `
+            @media (max-width: 768px) {
+              body::before {
+                background-image: url('${bgImage}') !important;
               }
             }
             ` : ''}
