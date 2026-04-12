@@ -22,6 +22,7 @@ export default function EvacuatorPage() {
       details={details}
       icon={<AlertTriangle size={32} />}
       image="/images/banner_evacuator.png"
+      bgImage="/images/evacuator_bg.jpg"
     >
       <h1 className="text-3xl font-bold mb-6 text-primary">Срочный эвакуатор во Владивостоке круглосуточно</h1>
       <p className="mb-6 leading-relaxed">

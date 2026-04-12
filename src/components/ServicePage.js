@@ -4,7 +4,7 @@ import { Phone, CheckCircle, ArrowRight, Shield, Globe, Clock, Box } from 'lucid
 import Link from 'next/link';
 import ContactForm from './ContactForm';
 
-export default function ServicePage({ title, description, details, icon, image, children }) {
+export default function ServicePage({ title, description, details, icon, image, bgImage, bgMobileImage, children }) {
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { duration: 0.6 } }
@@ -13,7 +13,28 @@ export default function ServicePage({ title, description, details, icon, image, 
   return (
     <div className="bg-bg-main">
       {/* Dynamic Header */}
-      <section className="relative pt-48 pb-32 overflow-hidden">
+      <section 
+        className={`relative pt-48 pb-32 overflow-hidden ${bgImage || bgMobileImage ? 'header-custom-bg' : ''}`}
+        style={bgImage ? {
+          backgroundImage: `linear-gradient(rgba(6, 12, 26, 0.6), rgba(6, 12, 26, 0.95)), url('${bgImage}')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        } : {}}
+      >
+        {(bgImage || bgMobileImage) && (
+          <style dangerouslySetInnerHTML={{__html: `
+            ${bgMobileImage ? `
+            @media (max-width: 768px) {
+              .header-custom-bg {
+                background-image: linear-gradient(rgba(6, 12, 26, 0.6), rgba(6, 12, 26, 0.95)), url('${bgMobileImage}') !important;
+                background-size: cover;
+                background-position: center;
+              }
+            }
+            ` : ''}
+          `}} />
+        )}
         {/* Local background removed to show global bridge background */}
         <div className="container relative z-10">
           <motion.div

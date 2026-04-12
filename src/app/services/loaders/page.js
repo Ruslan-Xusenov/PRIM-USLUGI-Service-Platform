@@ -22,6 +22,7 @@ export default function LoadersPage() {
       details={details}
       icon={<Hammer size={32} />}
       image="/images/banner_loaders.png"
+      bgMobileImage="/images/loaders_mobile_bg.jpg"
     >
       <h1 className="text-3xl font-bold mb-6 text-primary">Услуги грузчиков во Владивостоке: быстрый переезд и погрузка</h1>
       <p className="mb-6 leading-relaxed">
