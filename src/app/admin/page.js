@@ -53,6 +53,52 @@ export default function AdminDashboard() {
         </Link>
       </div>
 
+      <style dangerouslySetInnerHTML={{__html: `
+        @media (max-width: 768px) {
+          .admin-table-wrapper {
+             overflow: visible !important;
+             padding: 0 1rem;
+          }
+          .admin-table, .admin-table tbody, .admin-table tr, .admin-table td {
+            display: block;
+            width: 100%;
+          }
+          .admin-table thead {
+            display: none;
+          }
+          .admin-table tr {
+            margin-bottom: 1.5rem;
+            border: 1px solid #f1f5f9 !important;
+            border-radius: 1.25rem !important;
+            padding: 1.25rem;
+            background: #ffffff;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+          }
+          .admin-table tr:hover {
+            background: #ffffff !important;
+          }
+          .admin-table td {
+            padding: 0.5rem 0 !important;
+            border: none !important;
+            text-align: left !important;
+          }
+          /* Make URL wrap */
+          .admin-table-url {
+            word-break: break-all;
+            white-space: normal;
+          }
+          /* Actions row */
+          .admin-table td:last-child {
+            padding-top: 1rem !important;
+            border-top: 1px dashed #e2e8f0 !important;
+            margin-top: 0.5rem;
+          }
+          .admin-table td:last-child > div {
+            justify-content: flex-start !important;
+          }
+        }
+      `}} />
+
       <div className="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
         <div className="p-8 border-b border-slate-50 flex items-center gap-4 bg-slate-50/50">
           <div className="relative flex-1">
@@ -67,8 +113,8 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+        <div className="overflow-x-auto admin-table-wrapper">
+          <table className="w-full text-left border-collapse admin-table">
             <thead>
               <tr className="bg-slate-50/50">
                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Заголовок</th>
@@ -90,10 +136,10 @@ export default function AdminDashboard() {
                 filteredPages.map((page) => (
                   <tr key={page.id} className="hover:bg-slate-50/50 transition-colors group">
                     <td className="px-8 py-6">
-                      <div className="font-bold text-slate-800">{page.title}</div>
+                      <div className="font-bold text-slate-800" style={{ fontSize: '1.1rem' }}>{page.title}</div>
                       <div className="text-[10px] text-slate-400 mt-1 uppercase tracking-wider">SEO Title: {page.seo_title || 'N/A'}</div>
                     </td>
-                    <td className="px-8 py-6">
+                    <td className="px-8 py-6 admin-table-url">
                       <code className="bg-slate-100 text-accent px-3 py-1 rounded-lg text-xs font-mono">/{page.url}</code>
                     </td>
                     <td className="px-8 py-6 text-sm text-slate-500 font-medium">
@@ -107,7 +153,7 @@ export default function AdminDashboard() {
                           title="Посмотреть"
                           style={{
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            width: '2.5rem', height: '2.5rem', borderRadius: '0.75rem',
+                            width: '2.75rem', height: '2.75rem', borderRadius: '0.75rem',
                             background: '#f8fafc', color: '#64748b', border: '1px solid #e2e8f0',
                             transition: 'all 0.2s ease', textDecoration: 'none',
                             boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
@@ -115,14 +161,14 @@ export default function AdminDashboard() {
                           onMouseEnter={e => { e.currentTarget.style.color = '#3b82f6'; e.currentTarget.style.borderColor = '#bfdbfe'; e.currentTarget.style.background = '#eff6ff'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(59,130,246,0.15)'; }}
                           onMouseLeave={e => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.02)'; }}
                         >
-                          <ExternalLink size={18} />
+                          <ExternalLink size={20} />
                         </Link>
                         <Link 
                           href={`/admin/edit/${page.id}`} 
                           title="Редактировать"
                           style={{
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            width: '2.5rem', height: '2.5rem', borderRadius: '0.75rem',
+                            width: '2.75rem', height: '2.75rem', borderRadius: '0.75rem',
                             background: '#f8fafc', color: '#64748b', border: '1px solid #e2e8f0',
                             transition: 'all 0.2s ease', textDecoration: 'none',
                             boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
@@ -130,14 +176,14 @@ export default function AdminDashboard() {
                           onMouseEnter={e => { e.currentTarget.style.color = '#3b82f6'; e.currentTarget.style.borderColor = '#bfdbfe'; e.currentTarget.style.background = '#eff6ff'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(59,130,246,0.15)'; }}
                           onMouseLeave={e => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.02)'; }}
                         >
-                          <Edit2 size={18} />
+                          <Edit2 size={20} />
                         </Link>
                         <button 
                           onClick={() => deletePage(page.id)}
                           title="Удалить"
                           style={{
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            width: '2.5rem', height: '2.5rem', borderRadius: '0.75rem', cursor: 'pointer',
+                            width: '2.75rem', height: '2.75rem', borderRadius: '0.75rem', cursor: 'pointer',
                             background: '#f8fafc', color: '#64748b', border: '1px solid #e2e8f0',
                             transition: 'all 0.2s ease', textDecoration: 'none',
                             boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
@@ -145,7 +191,7 @@ export default function AdminDashboard() {
                           onMouseEnter={e => { e.currentTarget.style.color = '#ef4444'; e.currentTarget.style.borderColor = '#fecaca'; e.currentTarget.style.background = '#fef2f2'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(239,68,68,0.15)'; }}
                           onMouseLeave={e => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.02)'; }}
                         >
-                          <Trash2 size={18} />
+                          <Trash2 size={20} />
                         </button>
                       </div>
                     </td>
