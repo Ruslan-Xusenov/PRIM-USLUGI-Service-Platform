@@ -100,26 +100,50 @@ export default function AdminDashboard() {
                       {new Date(page.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-8 py-6 text-right">
-                      <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
                         <Link 
                           href={`/${page.url}`} 
                           target="_blank"
-                          className="p-2 text-slate-400 hover:text-accent hover:bg-white rounded-lg shadow-sm"
                           title="Посмотреть"
+                          style={{
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            width: '2.5rem', height: '2.5rem', borderRadius: '0.75rem',
+                            background: '#f8fafc', color: '#64748b', border: '1px solid #e2e8f0',
+                            transition: 'all 0.2s ease', textDecoration: 'none',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.color = '#3b82f6'; e.currentTarget.style.borderColor = '#bfdbfe'; e.currentTarget.style.background = '#eff6ff'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(59,130,246,0.15)'; }}
+                          onMouseLeave={e => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.02)'; }}
                         >
                           <ExternalLink size={18} />
                         </Link>
                         <Link 
                           href={`/admin/edit/${page.id}`} 
-                          className="p-2 text-slate-400 hover:text-blue-500 hover:bg-white rounded-lg shadow-sm"
                           title="Редактировать"
+                          style={{
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            width: '2.5rem', height: '2.5rem', borderRadius: '0.75rem',
+                            background: '#f8fafc', color: '#64748b', border: '1px solid #e2e8f0',
+                            transition: 'all 0.2s ease', textDecoration: 'none',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.color = '#3b82f6'; e.currentTarget.style.borderColor = '#bfdbfe'; e.currentTarget.style.background = '#eff6ff'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(59,130,246,0.15)'; }}
+                          onMouseLeave={e => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.02)'; }}
                         >
                           <Edit2 size={18} />
                         </Link>
                         <button 
                           onClick={() => deletePage(page.id)}
-                          className="p-2 text-slate-400 hover:text-red-500 hover:bg-white rounded-lg shadow-sm"
                           title="Удалить"
+                          style={{
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            width: '2.5rem', height: '2.5rem', borderRadius: '0.75rem', cursor: 'pointer',
+                            background: '#f8fafc', color: '#64748b', border: '1px solid #e2e8f0',
+                            transition: 'all 0.2s ease', textDecoration: 'none',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.color = '#ef4444'; e.currentTarget.style.borderColor = '#fecaca'; e.currentTarget.style.background = '#fef2f2'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(239,68,68,0.15)'; }}
+                          onMouseLeave={e => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.02)'; }}
                         >
                           <Trash2 size={18} />
                         </button>
