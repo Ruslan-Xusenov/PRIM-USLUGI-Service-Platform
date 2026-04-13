@@ -102,15 +102,17 @@ export default function MediaLibrary() {
       </div>
 
       <div className="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 p-8">
-        <div className="relative mb-8 max-w-md">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <input 
-            type="text" 
-            placeholder="Поиск изображений..." 
-            className="w-full pl-12 pr-6 py-3 rounded-xl border border-slate-100 focus:border-accent outline-none bg-slate-50/50 font-medium"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div style={{ marginBottom: '2rem', maxWidth: '400px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '0.75rem', padding: '0 1rem', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)' }}>
+            <Search style={{ color: '#94a3b8', flexShrink: 0 }} size={18} />
+            <input 
+              type="text" 
+              placeholder="Поиск изображений..." 
+              style={{ flex: 1, border: 'none', padding: '0.875rem 0.75rem', background: 'transparent', color: '#0f172a', outline: 'none', fontWeight: 500 }}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
 
         {loading ? (

@@ -113,13 +113,13 @@ export default function AdminDashboard() {
       `}} />
 
       <div className="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
-        <div className="p-8 border-b border-slate-50 flex items-center gap-4 bg-slate-50/50">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+        <div style={{ padding: '1.5rem', borderBottom: '1px solid #f8fafc', background: '#f8fafc' }}>
+          <div style={{ display: 'flex', alignItems: 'center', background: 'white', border: '1px solid #e2e8f0', borderRadius: '0.75rem', padding: '0 1rem', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
+            <Search style={{ color: '#94a3b8', flexShrink: 0 }} size={18} />
             <input 
               type="text" 
               placeholder="Поиск по страницам..." 
-              className="w-full pl-12 pr-6 py-3 rounded-xl border-none focus:ring-2 focus:ring-accent/20 bg-white"
+              style={{ flex: 1, border: 'none', padding: '0.75rem 0.75rem', background: 'transparent', color: '#0f172a', outline: 'none', fontSize: '0.95rem' }}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
