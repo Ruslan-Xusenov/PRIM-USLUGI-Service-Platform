@@ -21,7 +21,7 @@ export default function CommissionerPage() {
       description="Оперативная защита ваших интересов и грамотное оформление документов при ДТП. Наши специалисты на связи 24/7 по всему Приморскому краю."
       details={details}
       icon={<Shield size={32} />}
-      image="/images/banner_commissioner.png"
+      image="/images/IMG_0460.jpg"
     >
       <h1 className="text-3xl font-bold mb-6 text-primary">Вызов аварийного комиссара во Владивостоке и Приморском крае</h1>
       <p className="mb-6 leading-relaxed">

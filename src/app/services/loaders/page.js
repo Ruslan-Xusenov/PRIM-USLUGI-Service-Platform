@@ -21,7 +21,7 @@ export default function LoadersPage() {
       description="Комплексные решения для квартирных, офисных и промышленных переездов. Наша команда работает быстро, слаженно и с полной ответственностью за результат."
       details={details}
       icon={<Hammer size={32} />}
-      image="/images/banner_loaders.png"
+      image="/images/IMG_0511.jpg"
       bgMobileImage="/images/loaders_mobile_bg.jpg"
     >
       <h1 className="text-3xl font-bold mb-6 text-primary">Услуги грузчиков во Владивостоке: быстрый переезд и погрузка</h1>

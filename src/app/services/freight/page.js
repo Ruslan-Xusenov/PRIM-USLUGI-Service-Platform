@@ -18,7 +18,7 @@ export default function FreightPage() {
   return (
     <ServicePage 
       title="Грузоперевозки" 
-      image="/images/banner_freight.png"
+      image="/images/IMG_0512.jpg"
       description="Интеллектуальная логистика для ваших грузов. Мы обеспечиваем полную прозрачность, безопасность и своевременную доставку по всему Дальнему Востоку."
       details={details}
       icon={<Truck size={32} />}
