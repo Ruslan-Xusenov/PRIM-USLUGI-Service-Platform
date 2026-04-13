@@ -77,8 +77,8 @@ export default function MediaLibrary() {
     <AdminLayout>
       <div className="flex justify-between items-center mb-10">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Медиатека</h1>
-          <p className="text-slate-500 mt-1">Загружайте и управляйте изображениями</p>
+          <h1 style={{ fontSize: '2rem', fontWeight: 900, color: '#0f172a', margin: 0 }}>Медиатека</h1>
+          <p style={{ color: '#64748b', marginTop: '0.5rem', fontSize: '1rem' }}>Загружайте и управляйте изображениями</p>
         </div>
         <label 
           style={{

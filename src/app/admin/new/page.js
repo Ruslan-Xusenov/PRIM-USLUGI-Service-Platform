@@ -34,8 +34,8 @@ export default function NewPage() {
   return (
     <AdminLayout>
       <div className="mb-10">
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight">Создание новой страницы</h1>
-        <p className="text-slate-500 mt-1">Добавьте новый раздел и контент для вашего сайта</p>
+        <h1 style={{ fontSize: '2rem', fontWeight: 900, color: '#0f172a', margin: 0 }}>Создание новой страницы</h1>
+        <p style={{ color: '#64748b', marginTop: '0.5rem', fontSize: '1rem' }}>Добавьте новый раздел и контент для вашего сайта</p>
       </div>
 
       <PageEditor onSave={handleSave} isSubmitting={isSubmitting} />

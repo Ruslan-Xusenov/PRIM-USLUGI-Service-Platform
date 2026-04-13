@@ -63,14 +63,24 @@ export default function PageEditor({ initialData = {}, onSave, isSubmitting }) {
             <button 
               type="button"
               onClick={() => setActiveTab('content')}
-              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'content' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-500 hover:text-slate-800'}`}
+              style={{
+                padding: '0.625rem 1.25rem', borderRadius: '0.625rem', fontSize: '0.9rem', fontWeight: 700, transition: 'all 0.2s', border: 'none', cursor: 'pointer',
+                background: activeTab === 'content' ? '#0f172a' : 'transparent',
+                color: activeTab === 'content' ? 'white' : '#64748b',
+                boxShadow: activeTab === 'content' ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none'
+              }}
             >
               Контент
             </button>
             <button 
               type="button"
               onClick={() => setActiveTab('seo')}
-              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'seo' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-500 hover:text-slate-800'}`}
+              style={{
+                padding: '0.625rem 1.25rem', borderRadius: '0.625rem', fontSize: '0.9rem', fontWeight: 700, transition: 'all 0.2s', border: 'none', cursor: 'pointer',
+                background: activeTab === 'seo' ? '#0f172a' : 'transparent',
+                color: activeTab === 'seo' ? 'white' : '#64748b',
+                boxShadow: activeTab === 'seo' ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none'
+              }}
             >
               SEO Настройки
             </button>
@@ -210,25 +220,32 @@ export default function PageEditor({ initialData = {}, onSave, isSubmitting }) {
 
         {/* Sidebar Help / Tips */}
         <div className="col-span-4 space-y-6">
-          <div className="bg-slate-900 rounded-[2rem] p-8 text-white space-y-6 shadow-2xl">
-            <div className="flex items-center gap-3 text-accent mb-2">
+          <div style={{ background: '#0f172a', borderRadius: '2rem', padding: '2rem', color: 'white', display: 'flex', flexDirection: 'column', gap: '1.5rem', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#3b82f6', marginBottom: '0.5rem' }}>
               <AlertCircle size={24} />
-              <h3 className="font-bold text-lg">Нужна помощь?</h3>
+              <h3 style={{ fontWeight: 700, fontSize: '1.125rem', margin: 0 }}>Нужна помощь?</h3>
             </div>
-            <div className="space-y-4 text-sm text-slate-300">
-              <p>1. **URL-адрес**: Формируется автоматически из названия, но вы можете изменить его вручную.</p>
-              <p>2. **Изображения**: Чтобы добавить фото в текст, используйте иконку 'Picture' на панели инструментов.</p>
-              <p>3. **Совет по SEO**: Постарайтесь уложить описание в 160 символов, чтобы оно лучше смотрелось в поисковиках.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.875rem', color: '#cbd5e1' }}>
+              <p style={{ margin: 0 }}>1. **URL-адрес**: Формируется автоматически из названия, но вы можете изменить его вручную.</p>
+              <p style={{ margin: 0 }}>2. **Изображения**: Чтобы добавить фото в текст, используйте иконку 'Picture' на панели инструментов.</p>
+              <p style={{ margin: 0 }}>3. **Совет по SEO**: Постарайтесь уложить описание в 160 символов, чтобы оно лучше смотрелось в поисковиках.</p>
             </div>
           </div>
 
-          <div className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-xl space-y-6">
-             <div className="flex items-center gap-3 text-slate-800 mb-2">
-              <ImageIcon size={22} className="text-accent" />
-              <h3 className="font-bold">Медиатека</h3>
+          <div style={{ background: 'white', borderRadius: '2rem', padding: '2rem', border: '1px solid #f1f5f9', display: 'flex', flexDirection: 'column', gap: '1.5rem', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
+             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#1e293b', marginBottom: '0.5rem' }}>
+              <ImageIcon size={22} style={{ color: '#3b82f6' }} />
+              <h3 style={{ fontWeight: 700, fontSize: '1.125rem', margin: 0 }}>Медиатека</h3>
             </div>
-            <p className="text-xs text-slate-500 leading-relaxed">Сначала загрузите изображения в Медиатеку, затем скопируйте URL и вставьте его в редактор.</p>
-            <Link href="/admin/media" className="block text-center border-2 border-slate-100 hover:border-accent text-slate-600 hover:text-accent font-bold py-3 rounded-xl transition-all text-xs">Открыть Медиатеку</Link>
+            <p style={{ fontSize: '0.75rem', color: '#64748b', lineHeight: 1.6, margin: 0 }}>Сначала загрузите изображения в Медиатеку, затем скопируйте URL и вставьте его в редактор.</p>
+            <Link 
+              href="/admin/media" 
+              style={{ display: 'block', textAlign: 'center', border: '2px solid #f1f5f9', color: '#475569', fontWeight: 700, padding: '0.75rem', borderRadius: '0.75rem', textDecoration: 'none', transition: 'all 0.2s', fontSize: '0.75rem' }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = '#3b82f6'; e.currentTarget.style.color = '#3b82f6'; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = '#f1f5f9'; e.currentTarget.style.color = '#475569'; }}
+            >
+              Открыть Медиатеку
+            </Link>
           </div>
         </div>
       </div>
