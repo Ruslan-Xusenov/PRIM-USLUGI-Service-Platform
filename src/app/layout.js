@@ -62,7 +62,7 @@ export default function RootLayout({ children }) {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 transition: 'all 0.6s cubic-bezier(0.23,1,0.32,1)',
-                boxShadow: isScroldled ? '0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(59,130,246,0.05)' : 'none',
+                boxShadow: isScrolled ? '0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(59,130,246,0.05)' : 'none',
               }}
             >
               <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', textDecoration: 'none' }}>
