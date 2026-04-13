@@ -80,10 +80,24 @@ export default function MediaLibrary() {
           <h1 className="text-3xl font-black text-slate-900 tracking-tight">Медиатека</h1>
           <p className="text-slate-500 mt-1">Загружайте и управляйте изображениями</p>
         </div>
-        <label className={`flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-2xl font-bold shadow-lg transition-all cursor-pointer active:scale-95 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
-          <Upload size={20} />
+        <label 
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.625rem',
+            padding: '0.75rem 1.75rem',
+            background: 'linear-gradient(135deg, #1e293b, #0f172a)',
+            color: 'white', borderRadius: '1rem',
+            fontWeight: 700, fontSize: '0.95rem', cursor: isUploading ? 'not-allowed' : 'pointer',
+            boxShadow: '0 8px 24px rgba(15,23,42,0.3)',
+            transition: 'all 0.25s',
+            opacity: isUploading ? 0.6 : 1,
+            pointerEvents: isUploading ? 'none' : 'auto'
+          }}
+          onMouseEnter={e => { if (!isUploading) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(15,23,42,0.4)'; } }}
+          onMouseLeave={e => { if (!isUploading) { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(15,23,42,0.3)'; } }}
+        >
+          <Upload size={18} />
           <span>{isUploading ? 'Загрузка...' : 'Загрузить фото'}</span>
-          <input type="file" className="hidden" onChange={handleUpload} accept="image/*" />
+          <input type="file" style={{ display: 'none' }} onChange={handleUpload} accept="image/*" />
         </label>
       </div>
 

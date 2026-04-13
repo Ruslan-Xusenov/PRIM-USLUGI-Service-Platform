@@ -47,8 +47,21 @@ export default function AdminDashboard() {
           <h1 className="text-3xl font-black text-slate-900 tracking-tight">Дашборд</h1>
           <p className="text-slate-500 mt-1">Список всех динамических страниц</p>
         </div>
-        <Link href="/admin/new" className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-white px-6 py-3 rounded-2xl font-bold shadow-lg transition-all active:scale-95">
-          <Plus size={20} />
+        <Link 
+          href="/admin/new" 
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+            padding: '0.75rem 1.5rem',
+            background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+            color: 'white', borderRadius: '0.875rem',
+            fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none',
+            boxShadow: '0 4px 16px rgba(59,130,246,0.35)',
+            transition: 'all 0.2s'
+          }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(59,130,246,0.45)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(59,130,246,0.35)'; }}
+        >
+          <Plus size={18} />
           <span>Новая страница</span>
         </Link>
       </div>
