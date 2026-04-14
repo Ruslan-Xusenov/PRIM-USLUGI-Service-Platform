@@ -22,6 +22,7 @@ export default function CommissionerPage() {
       details={details}
       icon={<Shield size={32} />}
       image="/images/IMG_0460.jpg"
+      bgImage="/images/IMG_0460.jpg"
     >
       <h1 className="text-3xl font-bold mb-6 text-primary">Вызов аварийного комиссара во Владивостоке и Приморском крае</h1>
       <p className="mb-6 leading-relaxed">

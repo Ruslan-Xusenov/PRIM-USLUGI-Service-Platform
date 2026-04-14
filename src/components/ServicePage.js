@@ -114,8 +114,13 @@ export default function ServicePage({ title, description, details, icon, image, 
 
           {/* Sidebar Area */}
           <aside className="sticky top-32 space-y-8">
-             <div className="card-premium p-0 overflow-hidden border-none shadow-premium bg-white">
-                <img src={image || "/images/banner.png"} alt={title} className="w-full h-64 object-cover" />
+             <div className="card-premium p-0 overflow-hidden border-none shadow-premium bg-primary-light/30">
+                <img 
+                  src={image || "/images/banner.png"} 
+                  alt={title} 
+                  className="w-full h-auto object-contain" 
+                  style={{ maxHeight: '450px', display: 'block' }} 
+                />
                 <div className="p-8">
                    <h4 className="text-xl font-bold mb-6 flex items-center gap-2">
                      <Globe size={20} className="text-accent" /> Охват территорий
