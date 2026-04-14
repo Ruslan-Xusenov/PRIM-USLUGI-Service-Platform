@@ -1,10 +1,23 @@
 'use client';
 import { motion } from 'framer-motion';
-import { Phone, CheckCircle, ArrowRight, Shield, Globe, Clock, Box } from 'lucide-react';
+import { Phone, CheckCircle, ArrowRight, Shield, Globe, Clock, Box, Truck, Hammer, AlertTriangle, Activity, Briefcase } from 'lucide-react';
 import Link from 'next/link';
 import ContactForm from './ContactForm';
 
+const IconMap = {
+  Shield: <Shield size={32} />,
+  Truck: <Truck size={32} />,
+  Hammer: <Hammer size={32} />,
+  AlertTriangle: <AlertTriangle size={32} />,
+  Globe: <Globe size={32} />,
+  Clock: <Clock size={32} />,
+  Box: <Box size={32} />,
+  Activity: <Activity size={32} />,
+  Briefcase: <Briefcase size={32} />
+};
+
 export default function ServicePage({ title, description, details, icon, image, bgImage, bgMobileImage, children }) {
+  const resolvedIcon = typeof icon === 'string' ? (IconMap[icon] || <Box size={32} />) : icon;
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { duration: 0.6 } }
@@ -52,7 +65,7 @@ export default function ServicePage({ title, description, details, icon, image, 
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-2xl bg-accent/20 flex items-center justify-center text-accent">
-                {icon || <Box size={24} />}
+                {resolvedIcon || <Box size={24} />}
               </div>
               <span className="text-accent font-bold uppercase tracking-widest text-xs">Премиальный сервис</span>
             </div>
@@ -102,7 +115,7 @@ export default function ServicePage({ title, description, details, icon, image, 
                <h3 className="text-2xl font-bold mb-4 relative z-10">Нужна оперативная помощь?</h3>
                <p className="text-grey-400 mb-8 relative z-10 max-w-sm">Наши дежурные бригады готовы к выезду прямо сейчас. Свяжитесь с нами для моментального расчета стоимости.</p>
                <div className="flex flex-wrap gap-4 relative z-10">
-                 <a href="tel:+79998887766" className="btn btn-accent px-8">
+                 <a href="tel:+79673888889" className="btn btn-accent px-8">
                    <Phone size={18} className="mr-2" /> Позвонить
                  </a>
                  <Link href="#contact" className="btn bg-white/5 border border-white/10 text-white hover:bg-white/10">

@@ -14,6 +14,12 @@ db.exec(`
     seo_title TEXT,
     seo_description TEXT,
     seo_keywords TEXT,
+    header_description TEXT,
+    details_json TEXT,
+    icon_name TEXT,
+    image_url TEXT,
+    bg_image_url TEXT,
+    is_service INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
@@ -26,11 +32,30 @@ db.exec(`
     image_url TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
-
-  -- Migration: Add image_url if it doesn't exist
-  PRAGMA table_info(news);
-
 `);
+
+// Runtime migration: add missing columns if they don't exist
+const pagesInfo = db.prepare('PRAGMA table_info(pages)').all();
+const pagesColumns = pagesInfo.map(c => c.name);
+
+const newPagesColumns = [
+  { name: 'header_description', type: 'TEXT' },
+  { name: 'details_json', type: 'TEXT' },
+  { name: 'icon_name', type: 'TEXT' },
+  { name: 'image_url', type: 'TEXT' },
+  { name: 'bg_image_url', type: 'TEXT' },
+  { name: 'is_service', type: 'INTEGER DEFAULT 0' }
+];
+
+for (const col of newPagesColumns) {
+  if (!pagesColumns.includes(col.name)) {
+    try {
+      db.exec(`ALTER TABLE pages ADD COLUMN ${col.name} ${col.type}`);
+    } catch (e) {
+      // Column already exists
+    }
+  }
+}
 
 export function getNews() {
   return db.prepare('SELECT * FROM news ORDER BY created_at DESC LIMIT 10').all();

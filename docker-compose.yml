@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: prim-uslugi-web
+    restart: always
+    ports:
+      - "3005:3000"
+    volumes:
+      - ./prim_uslugi.db:/app/prim_uslugi.db
+      - ./public/uploads:/app/public/uploads
+    env_file:
+      - .env.local
+    environment:
+      - NODE_ENV=production
+
+networks:
+  default:
+    name: prim-uslugi-network

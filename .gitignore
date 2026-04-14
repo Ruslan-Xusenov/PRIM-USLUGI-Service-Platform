@@ -43,3 +43,6 @@ generate_icons.sh
 # Misc
 .DS_Store
 *.pem
+
+# Uploads
+/public/uploads/

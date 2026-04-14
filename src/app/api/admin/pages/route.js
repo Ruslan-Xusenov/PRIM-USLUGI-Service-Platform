@@ -13,7 +13,10 @@ export async function GET() {
 export async function POST(request) {
   try {
     const data = await request.json();
-    const { url, title, content, seo_title, seo_description, seo_keywords } = data;
+    const { 
+      url, title, content, seo_title, seo_description, seo_keywords,
+      header_description, details_json, icon_name, image_url, bg_image_url, is_service
+    } = data;
 
     // Check if URL exists
     const existing = db.prepare('SELECT id FROM pages WHERE url = ?').get(url);
@@ -22,9 +25,15 @@ export async function POST(request) {
     }
 
     const info = db.prepare(`
-      INSERT INTO pages (url, title, content, seo_title, seo_description, seo_keywords)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).run(url, title, content, seo_title, seo_description, seo_keywords);
+      INSERT INTO pages (
+        url, title, content, seo_title, seo_description, seo_keywords,
+        header_description, details_json, icon_name, image_url, bg_image_url, is_service
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      url, title, content, seo_title, seo_description, seo_keywords,
+      header_description, details_json, icon_name, image_url, bg_image_url, is_service || 0
+    );
 
     return NextResponse.json({ id: info.lastInsertRowid, ...data });
   } catch (error) {

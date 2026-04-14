@@ -16,7 +16,10 @@ export async function PUT(request, { params }) {
   try {
     const { id } = await params;
     const data = await request.json();
-    const { url, title, content, seo_title, seo_description, seo_keywords } = data;
+    const { 
+      url, title, content, seo_title, seo_description, seo_keywords,
+      header_description, details_json, icon_name, image_url, bg_image_url, is_service
+    } = data;
 
     // Check if new URL conflicts with other pages
     const conflict = db.prepare('SELECT id FROM pages WHERE url = ? AND id != ?').get(url, id);
@@ -26,9 +29,16 @@ export async function PUT(request, { params }) {
 
     db.prepare(`
       UPDATE pages 
-      SET url = ?, title = ?, content = ?, seo_title = ?, seo_description = ?, seo_keywords = ?, updated_at = CURRENT_TIMESTAMP
+      SET 
+        url = ?, title = ?, content = ?, seo_title = ?, seo_description = ?, seo_keywords = ?, 
+        header_description = ?, details_json = ?, icon_name = ?, image_url = ?, bg_image_url = ?, is_service = ?,
+        updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
-    `).run(url, title, content, seo_title, seo_description, seo_keywords, id);
+    `).run(
+      url, title, content, seo_title, seo_description, seo_keywords,
+      header_description, details_json, icon_name, image_url, bg_image_url, is_service,
+      id
+    );
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -149,8 +149,13 @@ export default function AdminDashboard() {
                 filteredPages.map((page) => (
                   <tr key={page.id} className="hover:bg-slate-50/50 transition-colors group">
                     <td className="px-8 py-6">
-                      <div className="font-bold text-slate-800" style={{ fontSize: '1.1rem' }}>{page.title}</div>
-                      <div className="text-[10px] text-slate-400 mt-1 uppercase tracking-wider">SEO Title: {page.seo_title || 'N/A'}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div className="font-bold text-slate-800" style={{ fontSize: '1.1rem' }}>{page.title}</div>
+                        {page.is_service ? (
+                          <span style={{ background: '#eff6ff', color: '#3b82f6', border: '1px solid #bfdbfe', borderRadius: '0.5rem', padding: '0.15rem 0.5rem', fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', flexShrink: 0 }}>Услуга</span>
+                        ) : null}
+                      </div>
+                      <div className="text-[10px] text-slate-400 mt-1 uppercase tracking-wider">SEO: {page.seo_title || 'N/A'}</div>
                     </td>
                     <td className="px-8 py-6 admin-table-url">
                       <code className="bg-slate-100 text-accent px-3 py-1 rounded-lg text-xs font-mono">/{page.url}</code>
