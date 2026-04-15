@@ -57,6 +57,142 @@ for (const col of newPagesColumns) {
   }
 }
 
+// Automated Seeding Logic
+const servicesCount = db.prepare('SELECT COUNT(*) as count FROM pages').get().count;
+
+if (servicesCount === 0) {
+  console.log('🌱 Database is empty. Seeding initial services...');
+  const initialServices = [
+    {
+      url: 'services/commissioner',
+      title: 'Аварийный комиссар',
+      header_description: 'Оперативная защита ваших интересов и грамотное оформление документов при ДТП. Наши специалисты на связи 24/7 по всему Приморскому краю.',
+      icon_name: 'Shield',
+      image_url: '/images/IMG_0460.jpg',
+      bg_image_url: '/images/IMG_0460.jpg',
+      details: [
+        { title: 'Оперативный выезд', text: 'Прибытие на место ДТП в течение 15-20 минут по всему краю.' },
+        { title: 'Оформление европротокола', text: 'Грамотное заполнение всех документов без вызова сотрудников ГИБДД.' },
+        { title: 'Юридическая помощь', text: 'Консультации по вопросам ответственности и получения выплат.' },
+        { title: 'Фотофиксация', text: 'Профессиональная съемка места происшествия для страховых компаний.' }
+      ],
+      content: `
+        <h1 class="text-3xl font-bold mb-6 text-primary">Вызов аварийного комиссара во Владивостоке и Приморском крае</h1>
+        <p class="mb-6 leading-relaxed">
+          Попали в дорожно-транспортное происшествие? Сохраняйте спокойствие — наша скорая автопомощь Приморья уже в пути! Опытный <strong>аварийный комиссар во Владивостоке</strong> оперативно прибудет на место.
+        </p>
+        
+        <h2 class="text-2xl font-bold mb-4 text-primary">Наши услуги:</h2>
+        <ul class="list-disc pl-6 mb-8 space-y-3">
+          <li>Быстрый <strong>вызов аварийного комиссара</strong> по всему Приморскому краю.</li>
+          <li>Грамотное <strong>оформление ДТП комиссаром</strong> и <strong>оформление европротокола</strong>.</li>
+          <li>Выезд специалиста за 30 минут — <strong>аварийный комиссар работает 24/7</strong>.</li>
+          <li><strong>Помощь при мелком ДТП</strong> с обязательной фотофиксацией места происшествия.</li>
+          <li><strong>Юридическая помощь при ДТП</strong> и привлечение комиссара для урегулирования споров со страховой компанией.</li>
+        </ul>
+  
+        <div class="bg-accent/5 p-6 rounded-2xl flex items-center gap-4">
+          <span class="text-2xl">🔗</span>
+          <p class="text-lg font-medium text-primary">
+            Если ваш автомобиль не на ходу, мы организуем <strong>срочную эвакуацию авто</strong>.
+          </p>
+        </div>
+      `
+    },
+    {
+      url: 'services/loaders',
+      title: 'Услуги грузчиков',
+      header_description: 'Комплексные решения для квартирных, офисных и промышленных переездов. Наша команда работает быстро, слаженно и с полной ответственностью за результат.',
+      icon_name: 'Hammer',
+      image_url: '/images/IMG_0511.jpg',
+      bg_image_url: '/images/IMG_0511.jpg',
+      details: [
+        { title: 'Квартирные переезды', text: 'Аккуратная упаковка, погрузка и расстановка мебели на новом месте.' },
+        { title: 'Офисные переезды', text: 'Быстрый переезд вашего бизнеса with minimal downtime.' },
+        { title: 'Складские работы', text: 'Разгрузка фур, контейнеров и организация хранения.' },
+        { title: 'Такелажные работы', text: 'Перенос пианино, сейфов и тяжелого оборудования.' }
+      ],
+      content: `
+        <h1 class="text-3xl font-bold mb-6 text-primary">Услуги грузчиков во Владивостоке</h1>
+        <p class="mb-6 leading-relaxed">
+          Требуется физическая помощь? Предоставляем опытные бригады: <strong>грузчики во Владивостоке</strong> и Приморском крае готовы выехать к вам за 30 минут.
+        </p>
+        
+        <h2 class="text-2xl font-bold mb-4 text-primary">Что мы предлагаем:</h2>
+        <ul class="list-disc pl-6 mb-8 space-y-3">
+          <li>Оперативные <strong>грузчики на час</strong>.</li>
+          <li><strong>Быстрый переезд с грузчиками</strong> под ключ.</li>
+          <li>Аккуратная <strong>погрузка/разгрузка</strong>.</li>
+          <li><strong>Сбор и разборка мебели</strong>.</li>
+          <li>Сloжные <strong>такелажные работы</strong>.</li>
+        </ul>
+      `
+    },
+    {
+      url: 'services/freight',
+      title: 'Грузоперевозки',
+      header_description: 'Интеллектуальная логистика для ваших грузов. Мы обеспечиваем полную прозрачность, безопасность и своевременную доставку.',
+      icon_name: 'Truck',
+      image_url: '/images/IMG_0512.jpg',
+      bg_image_url: '/images/IMG_0512.jpg',
+      details: [
+        { title: 'Городские перевозки', text: 'Оперативная доставка грузов по городу.' },
+        { title: 'Межгород', text: 'Перевозки по всему краю с гарантией сроков.' },
+        { title: 'Разнообразие транспорта', text: 'Машины под любые задачи.' },
+        { title: 'Страхование грузов', text: 'Полная материальная ответственность.' }
+      ],
+      content: `
+        <h1 class="text-3xl font-bold mb-6 text-primary">Грузоперевозки в Приморском крае</h1>
+        <p class="mb-6 leading-relaxed">
+          Ищете надежный способ доставить вещи? Сервис «Prim‑Uslugi» осуществляет <strong>грузоперевозки во Владивостоке</strong>.
+        </p>
+      `
+    },
+    {
+      url: 'services/evacuator',
+      title: 'Эвакуатор',
+      header_description: 'Круглосуточная эвакуация транспорта любой сложности. Мы приедем на помощь в любую погоду.',
+      icon_name: 'AlertTriangle',
+      image_url: '/images/banner_evacuator.png',
+      bg_image_url: '/images/evacuator_bg.jpg',
+      details: [
+        { title: 'Любая сложность', text: 'Эвакуация всех видов транспорта.' },
+        { title: 'Круглосуточно 24/7', text: 'Мы на связи днем и ночью.' },
+        { title: 'Бережная погрузка', text: 'Современное оборудование.' },
+        { title: 'Доступные цены', text: 'Прозрачное ценообразование.' }
+      ],
+      content: `
+        <h1 class="text-3xl font-bold mb-6 text-primary">Срочный эвакуатор 24/7</h1>
+        <p class="mb-6 leading-relaxed">
+          Неожиданная поломка? Надежный <strong>эвакуатор</strong> от «Prim‑Uslugi» решит проблему.
+        </p>
+      `
+    }
+  ];
+
+  const insert = db.prepare(`
+    INSERT OR REPLACE INTO pages (
+      url, title, content, header_description, details_json, icon_name, image_url, bg_image_url, is_service
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
+  `);
+
+  db.transaction(() => {
+    for (const s of initialServices) {
+      insert.run(
+        s.url,
+        s.title,
+        s.content.trim(),
+        s.header_description,
+        JSON.stringify(s.details),
+        s.icon_name,
+        s.image_url,
+        s.bg_image_url
+      );
+    }
+  })();
+  console.log('✅ Seeding completed.');
+}
+
 export function getNews() {
   return db.prepare('SELECT * FROM news ORDER BY created_at DESC LIMIT 10').all();
 }
