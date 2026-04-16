@@ -66,6 +66,10 @@ else
         echo -e "${GREEN}New Version: $(git rev-parse HEAD)${NC}"
         echo -e "${GREEN}The app is running on port 3005.${NC}"
         echo -e "${GREEN}====================================================${NC}"
+        
+        # Cleanup old images to save disk space
+        echo -e "${YELLOW}Cleaning up old Docker images...${NC}"
+        docker image prune -f
     else
         echo -e "${RED}Deployment failed. Please check logs with: docker-compose logs${NC}"
         exit 1
