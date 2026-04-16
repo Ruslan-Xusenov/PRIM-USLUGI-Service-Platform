@@ -23,6 +23,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/create-admin.js ./create-admin.js
 COPY --from=builder /app/src/lib/start-polling.js ./src/lib/start-polling.js
 # COPY --from=builder /app/prim_uslugi.db ./prim_uslugi.db 
 
