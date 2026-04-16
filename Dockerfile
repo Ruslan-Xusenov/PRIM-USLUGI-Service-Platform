@@ -1,6 +1,7 @@
 # Build stage
 FROM node:20-alpine AS builder
 WORKDIR /app
+LABEL project="prim-uslugi"
 
 # Install build dependencies for better-sqlite3
 RUN apk add --no-cache python3 make g++
@@ -13,6 +14,7 @@ RUN npm run build
 # Production stage
 FROM node:20-alpine AS runner
 WORKDIR /app
+LABEL project="prim-uslugi"
 
 ENV NODE_ENV production
 

@@ -66,6 +66,10 @@ else
         echo -e "${GREEN}The app is running on port 3005.${NC}"
         echo -e "${GREEN}====================================================${NC}"
         
+        # Safe cleanup: only remove dangling images specifically labeled for this project
+        echo -e "${YELLOW}Cleaning up old Docker images for this project...${NC}"
+        docker image prune -f --filter "label=project=prim-uslugi"
+        
     else
         echo -e "${RED}Deployment failed. Please check logs with: docker-compose logs${NC}"
         exit 1
