@@ -7,19 +7,24 @@ import { usePathname } from 'next/navigation';
 import { Phone, Mail, Menu, X, ArrowRight, ChevronRight, MapPin, Star } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Script from 'next/script';
+import { SettingsProvider, useSettings } from '@/context/SettingsContext';
 
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-heading', weight: ['300','400','500','600','700','800','900'] });
 const inter = Inter({ subsets: ['latin', 'cyrillic'], variable: '--font-body', weight: ['300','400','500','600','700'] });
 
 export default function RootLayout({ children }) {
+  return (
+    <SettingsProvider>
+      <LayoutContent>{children}</LayoutContent>
+    </SettingsProvider>
+  );
+}
+
+function LayoutContent({ children }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-
-  const pathname = usePathname();
-  const isAdmin = pathname?.startsWith('/admin');
-
-  useEffect(() => { setMounted(true); }, []);
+  const settings = useSettings();
 
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'unset';
@@ -124,12 +129,12 @@ export default function RootLayout({ children }) {
                 {/* Phone Display - Desktop */}
                 <div className="hidden lg:flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white/80 font-semibold text-sm">
                   <Phone size={14} className="text-accent" />
-                  <span>+7-967-388-88-89</span>
+                  <span>{settings.contact_phone}</span>
                 </div>
                 
                 {/* Phone Call - Mobile Only */}
                 <a 
-                  href="tel:+79673888889" 
+                  href={`tel:${settings.contact_phone.replace(/[^0-9+]/g, '')}`} 
                   className="flex lg:hidden items-center gap-2 p-2 text-white/80 hover:text-white"
                 >
                   <Phone size={20} className="text-accent" />
@@ -322,13 +327,13 @@ export default function RootLayout({ children }) {
                         borderRadius: '1.25rem', padding: '1.5rem',
                         display: 'flex', flexDirection: 'column', gap: '1.25rem',
                       }}>
-                        <a href="tel:+79673888889" style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'white', fontWeight: 700, fontSize: '1.125rem', textDecoration: 'none' }}>
+                        <a href={`tel:${settings.contact_phone.replace(/[^0-9+]/g, '')}`} style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'white', fontWeight: 700, fontSize: '1.125rem', textDecoration: 'none' }}>
                           <Phone size={22} style={{ color: 'var(--accent)' }} />
-                          +7-967-388-88-89
+                          {settings.contact_phone}
                         </a>
-                        <a href="mailto:prim-uslugi@internet.ru" style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'rgba(255,255,255,0.7)', fontWeight: 600, fontSize: '1rem', textDecoration: 'none' }}>
+                        <a href={`mailto:${settings.contact_email}`} style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'rgba(255,255,255,0.7)', fontWeight: 600, fontSize: '1rem', textDecoration: 'none' }}>
                           <Mail size={20} style={{ color: 'var(--accent)' }} />
-                          prim-uslugi@internet.ru
+                          {settings.contact_email}
                         </a>
                       </div>
                     </motion.div>
@@ -516,8 +521,8 @@ export default function RootLayout({ children }) {
                 </h4>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                   {[
-                    { icon: <Phone size={18} />, label: 'Горячая линия', value: '+7-967-388-88-89', href: 'tel:+79673888889' },
-                    { icon: <Mail size={18} />, label: 'E-mail', value: 'prim-uslugi@internet.ru', href: 'mailto:prim-uslugi@internet.ru' },
+                    { icon: <Phone size={18} />, label: 'Горячая линия', value: settings.contact_phone, href: `tel:${settings.contact_phone.replace(/[^0-9+]/g, '')}` },
+                    { icon: <Mail size={18} />, label: 'E-mail', value: settings.contact_email, href: `mailto:${settings.contact_email}` },
                   ].map((item, i) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
                       <div style={{
@@ -559,16 +564,22 @@ export default function RootLayout({ children }) {
                   © {new Date().getFullYear()} Prim-Uslugi. Инновационные решения услуг.
                 </p>
                 <div style={{ display: 'flex', gap: '1.5rem' }}>
-                  {['VK', 'Telegram', 'WhatsApp'].map(sn => (
-                    <Link
-                      key={sn}
-                      href="#"
+                  {[
+                    { name: 'VK', key: 'social_vk' },
+                    { name: 'Telegram', key: 'social_telegram' },
+                    { name: 'WhatsApp', key: 'social_whatsapp' }
+                  ].map(sn => (
+                    <a
+                      key={sn.name}
+                      href={settings[sn.key]}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       style={{ color: 'var(--text-dim)', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'none', transition: 'color 0.25s ease' }}
                       onMouseEnter={e => e.currentTarget.style.color = 'white'}
                       onMouseLeave={e => e.currentTarget.style.color = 'var(--text-dim)'}
                     >
-                      {sn}
-                    </Link>
+                      {sn.name}
+                    </a>
                   ))}
                 </div>
               </div>
@@ -579,7 +590,7 @@ export default function RootLayout({ children }) {
         {/* Floating Call Button Mobile */}
         {!isAdmin && (
           <a
-            href="tel:+79673888889"
+            href={`tel:${settings.contact_phone.replace(/[^0-9+]/g, '')}`}
             style={{
               position: 'fixed', bottom: '1.5rem', right: '1.5rem',
               width: '3.75rem', height: '3.75rem',

@@ -1,10 +1,19 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, FilePlus, Image, Home, Newspaper, Menu, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { LayoutDashboard, FilePlus, Image, Home, Newspaper, Menu, X, Settings, User, LogOut } from 'lucide-react';
 
 export default function AdminLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const res = await fetch('/api/admin/logout', { method: 'POST' });
+    if (res.ok) {
+      router.push('/admin/login');
+    }
+  };
 
   // Stop background bleed from global layout
   useEffect(() => {
@@ -130,9 +139,26 @@ export default function AdminLayout({ children }) {
             <Newspaper size={20} />
             <span style={{ fontWeight: 600 }}>Новости</span>
           </Link>
+          <div style={{ height: '1px', background: '#1e293b', margin: '0.5rem 0' }} />
+          <Link href="/admin/settings" onClick={() => setIsSidebarOpen(false)} className="admin-nav-item">
+            <Settings size={20} />
+            <span style={{ fontWeight: 600 }}>Настройки</span>
+          </Link>
+          <Link href="/admin/profile" onClick={() => setIsSidebarOpen(false)} className="admin-nav-item">
+            <User size={20} />
+            <span style={{ fontWeight: 600 }}>Профиль</span>
+          </Link>
         </nav>
 
-        <div style={{ padding: '1.5rem', borderTop: '1px solid #1e293b' }}>
+        <div style={{ padding: '1.5rem', borderTop: '1px solid #1e293b', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <button 
+            onClick={handleLogout}
+            className="admin-nav-item w-full" 
+            style={{ color: '#ef4444', background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left' }}
+          >
+            <LogOut size={18} />
+            <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Выйти</span>
+          </button>
           <Link href="/" className="admin-nav-item" style={{ color: '#94a3b8' }}>
             <Home size={18} />
             <span style={{ fontSize: '0.875rem', fontWeight: 500 }}>Вернуться на сайт</span>

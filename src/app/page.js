@@ -22,6 +22,7 @@ import {
 import Link from 'next/link';
 import ContactForm from '@/components/ContactForm';
 import NewsFeed from '@/components/NewsFeed';
+import { useSettings } from '@/context/SettingsContext';
 
 /* ====================================================
    Fade-in variant helpers
@@ -231,6 +232,7 @@ function StatCard({ stat, index }) {
 export default function Home() {
   const [focusedId, setFocusedId] = useState(null);
   const [mounted, setMounted] = useState(false);
+  const settings = useSettings();
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, -60]);
 
@@ -398,7 +400,7 @@ export default function Home() {
                   <ArrowRight size={18} />
                 </Link>
                 <a
-                  href="tel:+79673888889"
+                  href={`tel:${settings.contact_phone.replace(/[^0-9+]/g, '')}`}
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: '0.625rem',
                     padding: '1rem 1.75rem',
@@ -414,7 +416,7 @@ export default function Home() {
                   onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
                 >
                   <Phone size={18} style={{ color: 'var(--accent)' }} />
-                  +7-967-388-88-89
+                  {settings.contact_phone}
                 </a>
               </motion.div>
 
@@ -994,7 +996,7 @@ export default function Home() {
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 {[
-                  { icon: <Phone size={20} />, label: 'Прямая линия', value: '+7-967-388-88-89', href: 'tel:+79673888889' },
+                  { icon: <Phone size={20} />, label: 'Прямая линия', value: settings.contact_phone, href: `tel:${settings.contact_phone.replace(/[^0-9+]/g, '')}` },
                   { icon: <Mail size={20} />, label: 'Почта для бизнеса', value: 'prim-uslugi@internet.ru', href: 'mailto:prim-uslugi@internet.ru' },
                   { icon: <Clock size={20} />, label: 'Режим работы', value: 'Круглосуточно, 24/7', href: null },
                 ].map((item, i) => (

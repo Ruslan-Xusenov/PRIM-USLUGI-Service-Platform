@@ -33,6 +33,19 @@ db.exec(`
     image_url TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
+
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS settings (
+    key TEXT UNIQUE PRIMARY KEY,
+    value TEXT,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
 `);
 
 // Runtime migration: add missing columns if they don't exist
@@ -56,6 +69,32 @@ for (const col of newPagesColumns) {
       // Column already exists
     }
   }
+}
+
+// Initial Seeding for Users and Settings
+const userCount = db.prepare('SELECT COUNT(*) as count FROM users').get().count;
+if (userCount === 0) {
+  console.log('👤 Seeding default admin user...');
+  db.prepare('INSERT INTO users (username, password_hash) VALUES (?, ?)')
+    .run('admin', '$2b$10$OCjVEpiYC1h674lgLa3MOexUX3lx8ilFCqjNHvXTOHxue/5gmFI26');
+}
+
+const settingsCount = db.prepare('SELECT COUNT(*) as count FROM settings').get().count;
+if (settingsCount === 0) {
+  console.log('⚙️ Seeding default settings...');
+  const initialSettings = [
+    { key: 'social_vk', value: '#' },
+    { key: 'social_telegram', value: '#' },
+    { key: 'social_whatsapp', value: '#' },
+    { key: 'contact_phone', value: '+7-967-388-88-89' },
+    { key: 'contact_email', value: 'prim-uslugi@internet.ru' }
+  ];
+  const insertSetting = db.prepare('INSERT INTO settings (key, value) VALUES (?, ?)');
+  db.transaction(() => {
+    for (const s of initialSettings) {
+      insertSetting.run(s.key, s.value);
+    }
+  })();
 }
 
 // Automated Seeding Logic
@@ -214,6 +253,29 @@ export function updateNews(id, { title, content, type, image_url }) {
 
 export function deleteNews(id) {
   return db.prepare('DELETE FROM news WHERE id = ?').run(id);
+}
+
+// Settings helpers
+export function getSettings() {
+  const rows = db.prepare('SELECT * FROM settings').all();
+  return rows.reduce((acc, row) => {
+    acc[row.key] = row.value;
+    return acc;
+  }, {});
+}
+
+export function updateSetting(key, value) {
+  return db.prepare('INSERT OR REPLACE INTO settings (key, value, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP)')
+    .run(key, value);
+}
+
+// User helpers
+export function getUserByUsername(username) {
+  return db.prepare('SELECT * FROM users WHERE username = ?').get(username);
+}
+
+export function updateUserPassword(id, passwordHash) {
+  return db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(passwordHash, id);
 }
 
 export default db;
