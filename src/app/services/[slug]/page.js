@@ -2,6 +2,9 @@ import db from '@/lib/db';
 import { notFound } from 'next/navigation';
 import ServicePage from '@/components/ServicePage';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const url = `services/${slug}`;

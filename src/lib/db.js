@@ -1,7 +1,8 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 
-const dbPath = path.resolve(process.cwd(), 'prim_uslugi.db');
+const dbPath = path.join(process.cwd(), 'prim_uslugi.db');
+console.log(`📡 Connecting to database at: ${dbPath}`);
 const db = new Database(dbPath);
 
 // Initialize tables
