@@ -87,7 +87,8 @@ export default function SettingsPage() {
               <label className="block text-xs font-bold text-white/30 uppercase tracking-[0.2em] mb-3 ml-1">VK URL</label>
               <input
                 type="text"
-                className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+                className="form-input"
+                style={{ padding: '1rem 1.25rem' }}
                 value={settings.social_vk}
                 onChange={(e) => setSettings({ ...settings, social_vk: e.target.value })}
                 placeholder="https://vk.com/..."
@@ -97,7 +98,8 @@ export default function SettingsPage() {
               <label className="block text-xs font-bold text-white/30 uppercase tracking-[0.2em] mb-3 ml-1">Telegram URL</label>
               <input
                 type="text"
-                className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+                className="form-input"
+                style={{ padding: '1rem 1.25rem' }}
                 value={settings.social_telegram}
                 onChange={(e) => setSettings({ ...settings, social_telegram: e.target.value })}
                 placeholder="https://t.me/..."
@@ -107,7 +109,8 @@ export default function SettingsPage() {
               <label className="block text-xs font-bold text-white/30 uppercase tracking-[0.2em] mb-3 ml-1">WhatsApp URL / Номер</label>
               <input
                 type="text"
-                className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+                className="form-input"
+                style={{ padding: '1rem 1.25rem' }}
                 value={settings.social_whatsapp}
                 onChange={(e) => setSettings({ ...settings, social_whatsapp: e.target.value })}
                 placeholder="https://wa.me/..."
@@ -128,13 +131,14 @@ export default function SettingsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-xs font-bold text-white/30 uppercase tracking-[0.2em] mb-3 ml-1">Телефон</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-white/20">
+              <div style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, paddingLeft: '1rem', display: 'flex', alignItems: 'center', pointerEvents: 'none', color: 'rgba(255,255,255,0.2)' }}>
                   <Phone size={18} />
                 </div>
                 <input
                   type="text"
-                  className="w-full pl-12 pr-5 py-4 bg-white/5 border border-white/10 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+                  className="form-input"
+                  style={{ paddingLeft: '2.75rem', paddingRight: '1.25rem', paddingTop: '1rem', paddingBottom: '1rem', width: '100%' }}
                   value={settings.contact_phone}
                   onChange={(e) => setSettings({ ...settings, contact_phone: e.target.value })}
                 />
@@ -142,13 +146,14 @@ export default function SettingsPage() {
             </div>
             <div>
               <label className="block text-xs font-bold text-white/30 uppercase tracking-[0.2em] mb-3 ml-1">E-mail</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-white/20">
+              <div style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, paddingLeft: '1rem', display: 'flex', alignItems: 'center', pointerEvents: 'none', color: 'rgba(255,255,255,0.2)' }}>
                   <Mail size={18} />
                 </div>
                 <input
                   type="email"
-                  className="w-full pl-12 pr-5 py-4 bg-white/5 border border-white/10 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+                  className="form-input"
+                  style={{ paddingLeft: '2.75rem', paddingRight: '1.25rem', paddingTop: '1rem', paddingBottom: '1rem', width: '100%' }}
                   value={settings.contact_email}
                   onChange={(e) => setSettings({ ...settings, contact_email: e.target.value })}
                 />

@@ -80,14 +80,15 @@ export default function ProfilePage() {
             <div className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-white/30 uppercase tracking-[0.2em] mb-2 ml-1">Текущий пароль</label>
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-white/20">
+                <div style={{ position: 'relative' }}>
+                  <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, paddingLeft: '1rem', display: 'flex', alignItems: 'center', pointerEvents: 'none', color: 'rgba(255,255,255,0.2)' }}>
                     <Lock size={18} />
                   </div>
                   <input
                     type="password"
                     required
-                    className="block w-full pl-11 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+                    className="form-input"
+                    style={{ paddingLeft: '2.75rem', paddingRight: '1rem', paddingTop: '1rem', paddingBottom: '1rem', width: '100%' }}
                     value={passwords.currentPassword}
                     onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
                   />
@@ -100,7 +101,8 @@ export default function ProfilePage() {
                   <input
                     type="password"
                     required
-                    className="block w-full px-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+                    className="form-input"
+                    style={{ padding: '1rem 1rem', width: '100%', boxSizing: 'border-box' }}
                     value={passwords.newPassword}
                     onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
                   />
@@ -110,7 +112,8 @@ export default function ProfilePage() {
                   <input
                     type="password"
                     required
-                    className="block w-full px-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+                    className="form-input"
+                    style={{ padding: '1rem 1rem', width: '100%', boxSizing: 'border-box' }}
                     value={passwords.confirmPassword}
                     onChange={(e) => setPasswords({ ...passwords, confirmPassword: e.target.value })}
                   />
