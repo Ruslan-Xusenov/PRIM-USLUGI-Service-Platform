@@ -57,9 +57,8 @@ else
             chmod 666 prim_uslugi.db
         fi
 
-        # Automatically run seeding
-        echo -e "${YELLOW}Running automated database seeding...${NC}"
-        docker exec prim-uslugi-web node seed_services.js
+        # Database seeding is now automatically handled by Next.js inside src/lib/db.js
+        echo -e "${YELLOW}Database is self-seeding on startup...${NC}"
 
         echo -e "${GREEN}====================================================${NC}"
         echo -e "${GREEN}Update Successful!${NC}"

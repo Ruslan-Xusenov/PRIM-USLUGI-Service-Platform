@@ -997,7 +997,7 @@ export default function Home() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 {[
                   { icon: <Phone size={20} />, label: 'Прямая линия', value: settings.contact_phone, href: `tel:${settings.contact_phone.replace(/[^0-9+]/g, '')}` },
-                  { icon: <Mail size={20} />, label: 'Почта для бизнеса', value: 'prim-uslugi@internet.ru', href: 'mailto:prim-uslugi@internet.ru' },
+                  { icon: <Mail size={20} />, label: 'Почта для бизнеса', value: settings.contact_email, href: `mailto:${settings.contact_email}` },
                   { icon: <Clock size={20} />, label: 'Режим работы', value: 'Круглосуточно, 24/7', href: null },
                 ].map((item, i) => (
                   <motion.div

@@ -29,4 +29,5 @@ COPY --from=builder /app/src/lib/start-polling.js ./src/lib/start-polling.js
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# Start both the Telegram bot poller in background and NextJS in foreground
+CMD ["sh", "-c", "node src/lib/start-polling.js & npm start"]
