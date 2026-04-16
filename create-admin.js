@@ -17,6 +17,16 @@ const password = args[1];
 const dbPath = path.join(process.cwd(), 'prim_uslugi.db');
 const db = new Database(dbPath);
 
+// Ensure users table exists
+db.exec(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+`);
+
 async function run() {
   try {
     console.log(`📡 Connecting to database at: ${dbPath}`);
