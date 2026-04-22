@@ -21,8 +21,8 @@ nextApp.on('close', (code) => {
 });
 
 bot.on('close', (code) => {
-  console.log(`Bot process exited with code ${code}`);
-  nextApp.kill();
+  console.log(`Bot process exited with code ${code}. Next.js app will continue running.`);
+  // nextApp.kill(); // Commented out to prevent app crash if bot conflicts
 });
 
 process.on('SIGINT', () => {

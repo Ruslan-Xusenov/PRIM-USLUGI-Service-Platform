@@ -3,6 +3,7 @@ const isMobile = process.env.BUILD_TARGET === 'mobile';
 
 const nextConfig = {
   output: isMobile ? 'export' : undefined,
+  serverExternalPackages: ['better-sqlite3'],
   images: {
     unoptimized: true,
   },
