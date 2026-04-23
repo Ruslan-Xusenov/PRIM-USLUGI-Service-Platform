@@ -23,12 +23,16 @@ export async function sendNotifications(data) {
 
   // 1. Send to Telegram
   if (BOT_TOKEN && ADMIN_CHAT_ID) {
-    try {
-      const bot = new Telegraf(BOT_TOKEN);
-      await bot.telegram.sendMessage(ADMIN_CHAT_ID, message, { parse_mode: 'Markdown' });
-      results.telegram = true;
-    } catch (error) {
-      console.error('Telegram notification error:', error);
+    const adminIds = ADMIN_CHAT_ID.split(',').map(id => id.trim());
+    const bot = new Telegraf(BOT_TOKEN);
+    
+    for (const id of adminIds) {
+      try {
+        await bot.telegram.sendMessage(id, message, { parse_mode: 'Markdown' });
+        results.telegram = true;
+      } catch (error) {
+        console.error(`Telegram notification error for ID ${id}:`, error);
+      }
     }
   }
 

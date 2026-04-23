@@ -15,8 +15,11 @@ export async function POST(request) {
     const bot = new Telegraf(BOT_TOKEN);
 
     // Filter by admin ID
-    if (ADMIN_CHAT_ID && body.message && body.message.chat.id.toString() !== ADMIN_CHAT_ID.toString()) {
-      return NextResponse.json({ ok: true }); // Ignore non-admin messages
+    if (ADMIN_CHAT_ID && body.message) {
+      const adminIds = ADMIN_CHAT_ID.split(',').map(id => id.trim());
+      if (!adminIds.includes(body.message.chat.id.toString())) {
+        return NextResponse.json({ ok: true }); // Ignore non-admin messages
+      }
     }
 
     if (body.message && body.message.text) {

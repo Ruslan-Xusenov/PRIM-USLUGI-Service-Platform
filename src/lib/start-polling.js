@@ -18,9 +18,12 @@ bot.on('text', async (ctx) => {
   const chatId = ctx.message.chat.id.toString();
   
   // Filter by admin ID if configured
-  if (ADMIN_CHAT_ID && chatId !== ADMIN_CHAT_ID.toString()) {
-    console.log(`⚠️ Received message from non-admin chat: ${chatId}. Ignoring.`);
-    return;
+  if (ADMIN_CHAT_ID) {
+    const adminIds = ADMIN_CHAT_ID.split(',').map(id => id.trim());
+    if (!adminIds.includes(chatId)) {
+      console.log(`⚠️ Received message from non-admin chat: ${chatId}. Ignoring.`);
+      return;
+    }
   }
 
   const text = ctx.message.text;
