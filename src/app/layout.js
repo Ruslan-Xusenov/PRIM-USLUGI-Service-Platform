@@ -8,6 +8,7 @@ import { Phone, Mail, Menu, X, ArrowRight, ChevronRight, MapPin, Star } from 'lu
 import { motion, AnimatePresence } from 'framer-motion';
 import Script from 'next/script';
 import { SettingsProvider, useSettings } from '@/context/SettingsContext';
+import ChatWidget from '@/components/ChatWidget';
 
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-heading', weight: ['300','400','500','600','700','800','900'] });
 const inter = Inter({ subsets: ['latin', 'cyrillic'], variable: '--font-body', weight: ['300','400','500','600','700'] });
@@ -39,6 +40,60 @@ function LayoutContent({ children }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    setMounted(true);
+    
+    // Register Service Worker for PWA
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      const handleRegister = async () => {
+        try {
+          const registration = await navigator.serviceWorker.register('/sw.js');
+          console.log('ServiceWorker registration successful:', registration);
+          await subscribeUserToPush(registration);
+        } catch (error) {
+          console.warn('ServiceWorker registration failed:', error);
+        }
+      };
+      
+      handleRegister();
+    }
+  }, []);
+
+  async function subscribeUserToPush(registration) {
+    try {
+      if (!registration.pushManager) return;
+      
+      const keyRes = await fetch('/api/push');
+      if (!keyRes.ok) return;
+      const { publicKey } = await keyRes.json();
+      if (!publicKey) return;
+
+      const padding = '='.repeat((4 - publicKey.length % 4) % 4);
+      const base64 = (publicKey + padding).replace(/\-/g, '+').replace(/_/g, '/');
+      const rawData = window.atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+      for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+      }
+
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: outputArray
+        });
+
+        await fetch('/api/push', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ subscription })
+        });
+      }
+    } catch (err) {
+      console.warn('Push notification subscription failed:', err);
+    }
+  }
+
   const navLinks = [
     { name: 'Грузоперевозки', href: '/services/freight' },
     { name: 'Грузчики', href: '/services/loaders' },
@@ -48,6 +103,13 @@ function LayoutContent({ children }) {
 
   return (
     <html lang="ru" className={`${outfit.variable} ${inter.variable}`}>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="theme-color" content="#030711" />
+        <link rel="apple-touch-icon" href="/images/logo_premium.png" />
+      </head>
       <body className="antialiased">
 
         {/* ===== NAVIGATION ===== */}
@@ -588,25 +650,27 @@ function LayoutContent({ children }) {
             </div>
           </div>
         </footer>
-
-        {/* Floating Call Button Mobile */}
-        {!isAdmin && (
-          <a
-            href={`tel:${settings.contact_phone.replace(/[^0-9+]/g, '')}`}
-            style={{
-              position: 'fixed', bottom: '1.5rem', right: '1.5rem',
-              width: '3.75rem', height: '3.75rem',
-              background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-              color: 'white', borderRadius: '50%',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              zIndex: 900, boxShadow: '0 8px 32px rgba(59,130,246,0.45)',
-              animation: 'bounce-soft 2.5s ease-in-out infinite',
-              textDecoration: 'none',
-            }}
-            className="md:hidden"
-          >
-            <Phone size={22} />
-          </a>
+        {/* Floating Chat Widget & Call Button */}
+        {!isAdmin && mounted && (
+          <>
+            <ChatWidget />
+            <a
+              href={`tel:${settings.contact_phone.replace(/[^0-9+]/g, '')}`}
+              style={{
+                position: 'fixed', bottom: '6.5rem', right: '2rem',
+                width: '3.75rem', height: '3.75rem',
+                background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                color: 'white', borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                zIndex: 900, boxShadow: '0 8px 32px rgba(59,130,246,0.45)',
+                animation: 'bounce-soft 2.5s ease-in-out infinite',
+                textDecoration: 'none',
+              }}
+              className="md:hidden"
+            >
+              <Phone size={22} />
+            </a>
+          </>
         )}
 
         {/* Yandex Metrica */}

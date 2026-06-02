@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { LayoutDashboard, FilePlus, Image, Home, Newspaper, Menu, X, Settings, User, LogOut } from 'lucide-react';
+import { LayoutDashboard, FilePlus, Image, Home, Newspaper, Menu, X, Settings, User, LogOut, MessageSquare, ShoppingCart, Bell } from 'lucide-react';
 
 export default function AdminLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -138,6 +138,18 @@ export default function AdminLayout({ children }) {
           <Link href="/admin/news" onClick={() => setIsSidebarOpen(false)} className="admin-nav-item">
             <Newspaper size={20} />
             <span style={{ fontWeight: 600 }}>Новости</span>
+          </Link>
+          <Link href="/admin/orders" onClick={() => setIsSidebarOpen(false)} className="admin-nav-item">
+            <ShoppingCart size={20} />
+            <span style={{ fontWeight: 600 }}>Заказы</span>
+          </Link>
+          <Link href="/admin/chat" onClick={() => setIsSidebarOpen(false)} className="admin-nav-item">
+            <MessageSquare size={20} />
+            <span style={{ fontWeight: 600 }}>Чат поддержки</span>
+          </Link>
+          <Link href="/admin/push" onClick={() => setIsSidebarOpen(false)} className="admin-nav-item">
+            <Bell size={20} />
+            <span style={{ fontWeight: 600 }}>Push-рассылки</span>
           </Link>
           <div style={{ height: '1px', background: '#1e293b', margin: '0.5rem 0' }} />
           <Link href="/admin/settings" onClick={() => setIsSidebarOpen(false)} className="admin-nav-item">

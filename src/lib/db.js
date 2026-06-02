@@ -1,5 +1,6 @@
 import Database from 'better-sqlite3';
 import path from 'path';
+import webpush from 'web-push';
 
 const isVercel = process.env.VERCEL === '1';
 const dbPath = isVercel 
@@ -50,6 +51,32 @@ db.exec(`
     value TEXT,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
+
+  CREATE TABLE IF NOT EXISTS orders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    email TEXT,
+    service TEXT,
+    comment TEXT,
+    arrival_time TEXT,
+    status TEXT DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS chat_messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL,
+    sender TEXT NOT NULL,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS push_subscriptions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    subscription_json TEXT UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
 `);
 
 // Runtime migration: add missing columns if they don't exist
@@ -79,7 +106,7 @@ for (const col of newPagesColumns) {
 const userCount = db.prepare('SELECT COUNT(*) as count FROM users').get().count;
 if (userCount === 0) {
   console.log('👤 Seeding default admin user...');
-  db.prepare('INSERT INTO users (username, password_hash) VALUES (?, ?)')
+  db.prepare('INSERT OR IGNORE INTO users (username, password_hash) VALUES (?, ?)')
     .run('admin', '$2b$10$OCjVEpiYC1h674lgLa3MOexUX3lx8ilFCqjNHvXTOHxue/5gmFI26');
 }
 
@@ -93,12 +120,25 @@ if (settingsCount === 0) {
     { key: 'contact_phone', value: '+7-967-388-88-89' },
     { key: 'contact_email', value: 'prim-uslugi@internet.ru' }
   ];
-  const insertSetting = db.prepare('INSERT INTO settings (key, value) VALUES (?, ?)');
+  const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
   db.transaction(() => {
     for (const s of initialSettings) {
       insertSetting.run(s.key, s.value);
     }
   })();
+}
+
+// Generate VAPID keys if not present
+try {
+  const hasVapidPublic = db.prepare('SELECT value FROM settings WHERE key = ?').get('vapid_public_key');
+  if (!hasVapidPublic) {
+    console.log('🔑 Generating VAPID keys for Push Notifications...');
+    const keys = webpush.generateVAPIDKeys();
+    db.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)').run('vapid_public_key', keys.publicKey);
+    db.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)').run('vapid_private_key', keys.privateKey);
+  }
+} catch (e) {
+  console.error('Error generating VAPID keys:', e);
 }
 
 // Automated Seeding Logic
@@ -280,6 +320,60 @@ export function getUserByUsername(username) {
 
 export function updateUserPassword(id, passwordHash) {
   return db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(passwordHash, id);
+}
+
+// Orders helpers
+export function getOrders() {
+  return db.prepare('SELECT * FROM orders ORDER BY created_at DESC').all();
+}
+
+export function addOrder({ name, phone, email, service, comment, arrival_time }) {
+  return db.prepare(`
+    INSERT INTO orders (name, phone, email, service, comment, arrival_time)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `).run(name, phone, email || null, service || null, comment || null, arrival_time || null);
+}
+
+export function updateOrderStatus(id, status) {
+  return db.prepare('UPDATE orders SET status = ? WHERE id = ?').run(status, id);
+}
+
+export function deleteOrder(id) {
+  return db.prepare('DELETE FROM orders WHERE id = ?').run(id);
+}
+
+// Chat helpers
+export function getChatMessages(session_id) {
+  return db.prepare('SELECT * FROM chat_messages WHERE session_id = ? ORDER BY created_at ASC').all();
+}
+
+export function addChatMessage({ session_id, sender, message }) {
+  return db.prepare('INSERT INTO chat_messages (session_id, sender, message) VALUES (?, ?, ?)')
+    .run(session_id, sender, message);
+}
+
+export function getChatSessions() {
+  return db.prepare(`
+    SELECT DISTINCT session_id, 
+      (SELECT message FROM chat_messages WHERE session_id = c.session_id ORDER BY created_at DESC LIMIT 1) as last_message,
+      (SELECT created_at FROM chat_messages WHERE session_id = c.session_id ORDER BY created_at DESC LIMIT 1) as last_active
+    FROM chat_messages c
+    ORDER BY last_active DESC
+  `).all();
+}
+
+// Push subscription helpers
+export function addPushSubscription(subscription_json) {
+  return db.prepare('INSERT OR IGNORE INTO push_subscriptions (subscription_json) VALUES (?)')
+    .run(subscription_json);
+}
+
+export function getPushSubscriptions() {
+  return db.prepare('SELECT * FROM push_subscriptions').all();
+}
+
+export function deletePushSubscription(subscription_json) {
+  return db.prepare('DELETE FROM push_subscriptions WHERE subscription_json = ?').run(subscription_json);
 }
 
 export default db;

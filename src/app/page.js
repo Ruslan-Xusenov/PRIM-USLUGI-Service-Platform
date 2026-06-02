@@ -232,13 +232,30 @@ function StatCard({ stat, index }) {
 export default function Home() {
   const [focusedId, setFocusedId] = useState(null);
   const [mounted, setMounted] = useState(false);
+  const [dynamicServices, setDynamicServices] = useState([]);
   const settings = useSettings();
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, -60]);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => { 
+    setMounted(true); 
+    async function loadServices() {
+      try {
+        const res = await fetch('/api/services');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setDynamicServices(data);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading dynamic services:', error);
+      }
+    }
+    loadServices();
+  }, []);
 
-  const services = [
+  const staticServices = [
     {
       title: 'Грузоперевозки',
       desc: 'Логистические решения любой сложности. От малотоннажных до крупногабаритных перевозок по краю.',
@@ -265,6 +282,22 @@ export default function Home() {
       link: '/services/evacuator',
     },
   ];
+
+  const iconMap = {
+    Truck: <Truck size={28} />,
+    Hammer: <Hammer size={28} />,
+    Shield: <Shield size={28} />,
+    AlertTriangle: <AlertTriangle size={28} />,
+  };
+
+  const services = dynamicServices.length > 0
+    ? dynamicServices.map(s => ({
+        title: s.title,
+        desc: s.header_description || s.seo_description || '',
+        icon: iconMap[s.icon_name] || <Truck size={28} />,
+        link: `/${s.url}`,
+      }))
+    : staticServices;
 
   const stats = [
     { label: 'Лет опыта', value: '5+', icon: <Award /> },

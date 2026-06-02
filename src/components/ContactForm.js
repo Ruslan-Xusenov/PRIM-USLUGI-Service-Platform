@@ -8,8 +8,10 @@ export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
+    email: '',
     service: '',
     comment: '',
+    arrivalTime: '',
     consent: false,
   });
   const [status, setStatus] = useState('idle');
@@ -26,7 +28,7 @@ export default function ContactForm() {
       });
       if (res.ok) {
         setStatus('success');
-        setFormData({ name: '', phone: '', service: '', comment: '', consent: false });
+        setFormData({ name: '', phone: '', email: '', service: '', comment: '', arrivalTime: '', consent: false });
       } else {
         setStatus('error');
       }
@@ -193,6 +195,34 @@ export default function ContactForm() {
                     onFocus={handleInputFocus}
                     onBlur={handleInputBlur}
                     required
+                  />
+                </div>
+              </div>
+
+              {/* Email & Arrival Time */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div>
+                  <label style={labelStyle}>E-mail (для подтверждения)</label>
+                  <input
+                    type="email"
+                    placeholder="example@mail.ru"
+                    style={{ ...inputStyle }}
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                  />
+                </div>
+                <div>
+                  <label style={labelStyle}>Время приезда</label>
+                  <input
+                    type="text"
+                    placeholder="Например: Как можно скорее"
+                    style={{ ...inputStyle }}
+                    value={formData.arrivalTime}
+                    onChange={(e) => setFormData({ ...formData, arrivalTime: e.target.value })}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
                   />
                 </div>
               </div>
