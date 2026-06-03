@@ -1,9 +1,22 @@
 import { NextResponse } from 'next/server';
-import { addChatMessage, getChatMessages } from '@/lib/db';
 import { Telegraf } from 'telegraf';
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID;
+
+let dbFunctions = null;
+
+async function getDb() {
+  if (dbFunctions) return dbFunctions;
+  try {
+    const mod = await import('@/lib/db');
+    dbFunctions = { addChatMessage: mod.addChatMessage, getChatMessages: mod.getChatMessages };
+    return dbFunctions;
+  } catch (e) {
+    console.warn('Database not available:', e.message);
+    return null;
+  }
+}
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -12,7 +25,9 @@ export async function GET(request) {
     return NextResponse.json({ error: 'Session ID is required' }, { status: 400 });
   }
   try {
-    const messages = getChatMessages(sessionId);
+    const db = await getDb();
+    if (!db) return NextResponse.json([]);
+    const messages = db.getChatMessages(sessionId);
     return NextResponse.json(messages);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -26,7 +41,10 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Session ID and message are required' }, { status: 400 });
     }
 
-    addChatMessage({ session_id: sessionId, sender: sender || 'user', message });
+    const db = await getDb();
+    if (db) {
+      db.addChatMessage({ session_id: sessionId, sender: sender || 'user', message });
+    }
 
     // If the user sent a message, alert the admin in Telegram
     if (sender !== 'admin' && BOT_TOKEN && ADMIN_CHAT_ID) {

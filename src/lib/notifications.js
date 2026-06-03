@@ -1,6 +1,14 @@
 import { Telegraf } from 'telegraf';
 import nodemailer from 'nodemailer';
-import { addOrder } from '@/lib/db';
+
+let addOrder;
+try {
+  const dbModule = await import('@/lib/db');
+  addOrder = dbModule.addOrder;
+} catch (e) {
+  console.warn('Database module not available (Vercel serverless), skipping DB operations');
+  addOrder = null;
+}
 
 // These should be environment variables in a real project
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
@@ -13,18 +21,20 @@ const SMTP_PASS = process.env.SMTP_PASS;
 export async function sendNotifications(data) {
   const { name, phone, service, comment, email, arrivalTime } = data;
 
-  // Save order to SQLite Database
-  try {
-    addOrder({
-      name,
-      phone,
-      email,
-      service,
-      comment,
-      arrival_time: arrivalTime
-    });
-  } catch (error) {
-    console.error('Error saving order to database:', error);
+  // Save order to SQLite Database (skipped on Vercel serverless)
+  if (addOrder) {
+    try {
+      addOrder({
+        name,
+        phone,
+        email,
+        service,
+        comment,
+        arrival_time: arrivalTime
+      });
+    } catch (error) {
+      console.error('Error saving order to database:', error);
+    }
   }
 
   const message = `

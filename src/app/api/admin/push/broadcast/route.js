@@ -1,17 +1,69 @@
 import { NextResponse } from 'next/server';
 import webpush from 'web-push';
-import db, { getPushSubscriptions, deletePushSubscription } from '@/lib/db';
 import { getSession } from '@/lib/auth';
+import { getPushSubscriptionsKV, getPushSubscriptionCountKV, deletePushSubscriptionKV } from '@/lib/pushStore';
 
 export const dynamic = 'force-dynamic';
+
+async function getVapidKeys() {
+  // First try env vars (Vercel)
+  if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+    return {
+      publicKey: process.env.VAPID_PUBLIC_KEY,
+      privateKey: process.env.VAPID_PRIVATE_KEY,
+      email: process.env.VAPID_EMAIL || 'admin@prim-uslugi.ru',
+    };
+  }
+  // Fallback to DB (local dev)
+  try {
+    const { default: db } = await import('@/lib/db');
+    const pub = db.prepare('SELECT value FROM settings WHERE key = ?').get('vapid_public_key')?.value;
+    const priv = db.prepare('SELECT value FROM settings WHERE key = ?').get('vapid_private_key')?.value;
+    const email = db.prepare('SELECT value FROM settings WHERE key = ?').get('contact_email')?.value || 'admin@prim-uslugi.ru';
+    if (pub && priv) return { publicKey: pub, privateKey: priv, email };
+  } catch (e) {
+    console.warn('DB not available for VAPID keys');
+  }
+  return null;
+}
+
+async function getSubscriptions() {
+  // Try Redis first (Vercel)
+  try {
+    const subs = await getPushSubscriptionsKV();
+    if (subs && subs.length > 0) return subs;
+  } catch (e) {
+    console.warn('Redis not available for subscriptions');
+  }
+  // Fallback to SQLite (local dev)
+  try {
+    const { getPushSubscriptions } = await import('@/lib/db');
+    return getPushSubscriptions();
+  } catch (e) {
+    console.warn('DB not available for subscriptions');
+  }
+  return [];
+}
+
+async function getSubCount() {
+  try {
+    const count = await getPushSubscriptionCountKV();
+    if (count > 0) return count;
+  } catch (e) {}
+  try {
+    const { getPushSubscriptions } = await import('@/lib/db');
+    return getPushSubscriptions().length;
+  } catch (e) {}
+  return 0;
+}
 
 export async function GET() {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   try {
-    const subscriptions = getPushSubscriptions();
-    return NextResponse.json({ count: subscriptions.length });
+    const count = await getSubCount();
+    return NextResponse.json({ count });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -27,21 +79,18 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Title and body are required' }, { status: 400 });
     }
 
-    const vapidPublicKey = db.prepare('SELECT value FROM settings WHERE key = ?').get('vapid_public_key')?.value;
-    const vapidPrivateKey = db.prepare('SELECT value FROM settings WHERE key = ?').get('vapid_private_key')?.value;
-    const contactEmail = db.prepare('SELECT value FROM settings WHERE key = ?').get('contact_email')?.value || 'admin@prim-uslugi.ru';
-
-    if (!vapidPublicKey || !vapidPrivateKey) {
-      return NextResponse.json({ error: 'VAPID keys not configured in settings' }, { status: 500 });
+    const vapid = await getVapidKeys();
+    if (!vapid) {
+      return NextResponse.json({ error: 'VAPID keys not configured. Set VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY env vars.' }, { status: 500 });
     }
 
     webpush.setVapidDetails(
-      contactEmail.startsWith('mailto:') ? contactEmail : `mailto:${contactEmail}`,
-      vapidPublicKey,
-      vapidPrivateKey
+      vapid.email.startsWith('mailto:') ? vapid.email : `mailto:${vapid.email}`,
+      vapid.publicKey,
+      vapid.privateKey
     );
 
-    const subscriptions = getPushSubscriptions();
+    const subscriptions = await getSubscriptions();
     const payload = JSON.stringify({ title, body, url: '/' });
 
     let successCount = 0;
@@ -49,7 +98,7 @@ export async function POST(request) {
 
     const promises = subscriptions.map(async (subStr) => {
       try {
-        const sub = JSON.parse(subStr);
+        const sub = typeof subStr === 'string' ? JSON.parse(subStr) : subStr;
         await webpush.sendNotification(sub, payload);
         successCount++;
       } catch (error) {
@@ -57,7 +106,8 @@ export async function POST(request) {
         failureCount++;
         if (error.statusCode === 404 || error.statusCode === 410) {
           try {
-            deletePushSubscription(subStr);
+            const key = typeof subStr === 'string' ? subStr : JSON.stringify(subStr);
+            await deletePushSubscriptionKV(key);
           } catch (dbErr) {
             console.error('Failed to delete defunct subscription:', dbErr);
           }
