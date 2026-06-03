@@ -1,10 +1,12 @@
-const CACHE_NAME = 'prim-uslugi-cache-v1';
+const CACHE_NAME = 'prim-uslugi-cache-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/manifest.json',
   '/images/logo_premium.png',
   '/images/logo.png',
   '/images/banner.png',
+  '/images/icon-192x192.png',
+  '/images/badge-96x96.png',
   '/services/freight',
   '/services/loaders',
   '/services/commissioner',
@@ -84,8 +86,8 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: data.body,
-    icon: '/images/logo_premium.png',
-    badge: '/images/logo_premium.png',
+    icon: '/images/icon-192x192.png',
+    badge: '/images/badge-96x96.png',
     vibrate: [100, 50, 100],
     data: {
       url: data.url || '/'
