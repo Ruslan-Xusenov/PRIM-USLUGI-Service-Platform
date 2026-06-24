@@ -702,7 +702,7 @@ export default function HomeClient() {
                 </Link>
               ))}
             </div>
-          </div>
+          </m.div>
         </div>
       </section>
       </DeferredRender>
@@ -710,6 +710,7 @@ export default function HomeClient() {
       {/* ================================================
           WHY US / UTP SECTION
           ================================================ */}
+      <DeferredRender delay={200}>
       <section style={{ padding: '8rem 0', position: 'relative', overflow: 'hidden' }}>
         {/* Background surface */}
         <div style={{
@@ -814,7 +815,6 @@ export default function HomeClient() {
               </m.div>
             ))}
           </m.div>
-          </div>
         </div>
       </section>
       </DeferredRender>
@@ -983,7 +983,6 @@ export default function HomeClient() {
                 <ArrowUpRight size={16} />
               </Link>
             </m.div>
-          </div>
           </div>
         </div>
       </section>
@@ -1210,6 +1209,7 @@ export default function HomeClient() {
           </div>
         </div>
       </section>
+      </DeferredRender>
       </div>
     </LazyMotion>
   );
