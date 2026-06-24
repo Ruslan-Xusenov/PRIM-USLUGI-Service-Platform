@@ -10,6 +10,7 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import DeferredRender from '@/components/DeferredRender';
 import { useSettings } from '@/context/SettingsContext';
 import { loadFramerFeatures } from '@/components/MotionMock';
 
@@ -550,6 +551,7 @@ export default function HomeClient() {
       {/* ================================================
           SERVICES SECTION
           ================================================ */}
+      <DeferredRender delay={400}>
       <section style={{ padding: '8rem 0', position: 'relative' }}>
         {/* Top edge glow */}
         <div style={{
@@ -670,10 +672,12 @@ export default function HomeClient() {
           </div>
         </div>
       </section>
+      </DeferredRender>
 
       {/* ================================================
           POPULAR SERVICES QUICK ACCESS
           ================================================ */}
+      <DeferredRender delay={300}>
       <section style={{ padding: '3rem 0', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
         <div className="container">
           <m.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
@@ -698,9 +702,10 @@ export default function HomeClient() {
                 </Link>
               ))}
             </div>
-          </m.div>
+          </div>
         </div>
       </section>
+      </DeferredRender>
 
       {/* ================================================
           WHY US / UTP SECTION
@@ -809,12 +814,15 @@ export default function HomeClient() {
               </m.div>
             ))}
           </m.div>
+          </div>
         </div>
       </section>
+      </DeferredRender>
 
       {/* ================================================
           ABOUT SECTION
           ================================================ */}
+      <DeferredRender delay={300}>
       <section style={{ padding: '8rem 0', position: 'relative' }}>
         <div className="container">
           <div
@@ -976,12 +984,15 @@ export default function HomeClient() {
               </Link>
             </m.div>
           </div>
+          </div>
         </div>
       </section>
+      </DeferredRender>
 
       {/* ================================================
           HOW IT WORKS
           ================================================ */}
+      <DeferredRender delay={400}>
       <section style={{ padding: '8rem 0', position: 'relative' }}>
         <div className="container">
           <m.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} style={{ textAlign: 'center', marginBottom: '4rem' }}>
