@@ -1,5 +1,9 @@
 'use client';
 import './globals.css';
+import { Inter, Outfit } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin', 'cyrillic'], variable: '--font-body', display: 'swap' });
+const outfit = Outfit({ subsets: ['latin'], variable: '--font-heading', display: 'swap' });
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -125,18 +129,6 @@ function LayoutContent({ children }) {
   return (
     <html lang="ru">
       <head>
-        {/* Non-blocking Google Fonts — preconnect + async load */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
-          media="print"
-          onLoad="this.media='all'"
-        />
-        <noscript>
-          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" />
-        </noscript>
         <link rel="manifest" href="/manifest.json" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -160,7 +152,7 @@ function LayoutContent({ children }) {
           "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "10000" }
         }) }} />
       </head>
-      <body className="antialiased">
+      <body className={`${inter.variable} ${outfit.variable} antialiased`}>
         {/* Background Image Optimized */}
         <div style={{ position: 'fixed', inset: 0, zIndex: -2, opacity: 0.35 }}>
           <Image

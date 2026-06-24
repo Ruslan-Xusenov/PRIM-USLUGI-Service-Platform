@@ -1,8 +1,6 @@
 
 :root {
   /* Typography */
-  --font-heading: 'Outfit', system-ui, -apple-system, sans-serif;
-  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 
   /* Color System */
   --primary: #060c1a;
@@ -32,8 +30,6 @@
   --bg-footer: #050a15;
 
   /* Fonts */
-  --font-heading: 'Outfit', sans-serif;
-  --font-body: 'Inter', sans-serif;
 
   /* Gradients */
   --grad-primary: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
