@@ -153,17 +153,24 @@ function LayoutContent({ children }) {
         }) }} />
       </head>
       <body className={`${inter.variable} ${outfit.variable} antialiased`}>
-        {/* Background Image Optimized */}
-        <div style={{ position: 'fixed', inset: 0, zIndex: -2, opacity: 0.35 }}>
-          <Image
+        {/* Background Image Optimized for Mobile and Web */}
+        <picture>
+          <source media="(max-width: 640px)" srcSet="/images/banner_freight_mobile.jpg" />
+          <img
             src="/images/banner_freight_web.jpg"
             alt="Background"
-            fill
-            priority
-            sizes="(max-width: 640px) 640px, 100vw"
-            style={{ objectFit: 'cover' }}
+            fetchPriority="high"
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: -2,
+              opacity: 0.35,
+              width: '100vw',
+              height: '100vh',
+              objectFit: 'cover',
+            }}
           />
-        </div>
+        </picture>
         {/* ===== NAVIGATION ===== */}
         <header
           className={`fixed top-0 left-0 right-0 z-1000 transition-all duration-700 ${(mounted && mobileMenuOpen) || isAdmin ? 'hidden' : 'block'
