@@ -12,10 +12,21 @@ export async function generateMetadata({ params }) {
 
   if (!page) return {};
 
+  const siteUrl = process.env.SITE_URL || 'https://prim-uslugi.ru';
+
   return {
     title: page.seo_title || page.title,
     description: page.seo_description,
     keywords: page.seo_keywords,
+    alternates: { canonical: `${siteUrl}/${url}` },
+    openGraph: {
+      title: page.seo_title || page.title,
+      description: page.seo_description,
+      url: `${siteUrl}/${url}`,
+      siteName: 'Prim-Uslugi',
+      locale: 'ru_RU',
+      type: 'website',
+    },
   };
 }
 
@@ -28,7 +39,6 @@ export default async function DynamicServicePage({ params }) {
     notFound();
   }
 
-  // Parse details from JSON
   let details = [];
   try {
     details = page.details_json ? JSON.parse(page.details_json) : [];
@@ -37,13 +47,16 @@ export default async function DynamicServicePage({ params }) {
   }
 
   return (
-    <ServicePage 
+    <ServicePage
       title={page.title}
       description={page.header_description}
       details={details}
       icon={page.icon_name}
       image={page.image_url}
       bgImage={page.bg_image_url}
+      priceFrom={page.price_from}
+      priceTo={page.price_to}
+      duration={page.duration}
     >
       <div dangerouslySetInnerHTML={{ __html: page.content }} />
     </ServicePage>

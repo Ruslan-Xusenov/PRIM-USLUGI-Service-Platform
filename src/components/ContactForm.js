@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from '@/components/MotionMock';
 import { Send, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function ContactForm() {
@@ -125,7 +125,7 @@ export default function ContactForm() {
 
         <AnimatePresence mode="wait">
           {status === 'success' ? (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
@@ -160,9 +160,9 @@ export default function ContactForm() {
               >
                 Отправить ещё раз
               </button>
-            </motion.div>
+            </m.div>
           ) : (
-            <motion.form
+            <m.form
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -172,8 +172,9 @@ export default function ContactForm() {
               {/* Name + Phone */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
-                  <label style={labelStyle}>Имя</label>
+                  <label htmlFor="contact_name" style={labelStyle}>Имя</label>
                   <input
+                    id="contact_name"
                     type="text"
                     placeholder="Иван Иванов"
                     style={{ ...inputStyle }}
@@ -185,8 +186,9 @@ export default function ContactForm() {
                   />
                 </div>
                 <div>
-                  <label style={labelStyle}>Телефон</label>
+                  <label htmlFor="contact_phone" style={labelStyle}>Телефон</label>
                   <input
+                    id="contact_phone"
                     type="tel"
                     placeholder="+7 (___) ___-__-__"
                     style={{ ...inputStyle }}
@@ -202,8 +204,9 @@ export default function ContactForm() {
               {/* Email & Arrival Time */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
-                  <label style={labelStyle}>E-mail (для подтверждения)</label>
+                  <label htmlFor="contact_email" style={labelStyle}>E-mail (для подтверждения)</label>
                   <input
+                    id="contact_email"
                     type="email"
                     placeholder="example@mail.ru"
                     style={{ ...inputStyle }}
@@ -214,8 +217,9 @@ export default function ContactForm() {
                   />
                 </div>
                 <div>
-                  <label style={labelStyle}>Время приезда</label>
+                  <label htmlFor="contact_time" style={labelStyle}>Время приезда</label>
                   <input
+                    id="contact_time"
                     type="text"
                     placeholder="Например: Как можно скорее"
                     style={{ ...inputStyle }}
@@ -229,8 +233,9 @@ export default function ContactForm() {
 
               {/* Service select */}
               <div>
-                <label style={labelStyle}>Тип услуги</label>
+                <label htmlFor="contact_service" style={labelStyle}>Тип услуги</label>
                 <select
+                  id="contact_service"
                   style={{ ...inputStyle, appearance: 'none', cursor: 'pointer', color: formData.service ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.35)' }}
                   value={formData.service}
                   onChange={(e) => setFormData({ ...formData, service: e.target.value })}
@@ -248,8 +253,9 @@ export default function ContactForm() {
 
               {/* Comment */}
               <div>
-                <label style={labelStyle}>Комментарий</label>
+                <label htmlFor="contact_comment" style={labelStyle}>Комментарий</label>
                 <textarea
+                  id="contact_comment"
                   placeholder="Опишите вашу задачу..."
                   rows={3}
                   style={{ ...inputStyle, resize: 'none' }}
@@ -288,7 +294,7 @@ export default function ContactForm() {
               </div>
 
               {/* Submit */}
-              <motion.button
+              <m.button
                 type="submit"
                 disabled={status === 'loading' || !formData.consent}
                 whileHover={status !== 'loading' && formData.consent ? { y: -2, boxShadow: '0 16px 40px rgba(59,130,246,0.5)' } : {}}
@@ -316,12 +322,12 @@ export default function ContactForm() {
                     <Send size={18} />
                   </>
                 )}
-              </motion.button>
+              </m.button>
 
               {/* Error */}
               <AnimatePresence>
                 {status === 'error' && (
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 8 }}
@@ -334,10 +340,10 @@ export default function ContactForm() {
                   >
                     <AlertCircle size={16} />
                     Ошибка при отправке. Пожалуйста, проверьте данные.
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
-            </motion.form>
+            </m.form>
           )}
         </AnimatePresence>
       </div>

@@ -1,17 +1,19 @@
 'use client';
 import './globals.css';
-import { Outfit, Inter } from 'next/font/google';
+
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { Phone, Mail, Menu, X, ArrowRight, ChevronRight, MapPin, Star } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Phone, Mail, Menu, X, ArrowRight, ChevronRight, MapPin, Star, Wrench, Zap, Scale, PaintBucket, Home, Truck, Hammer, Shield, AlertTriangle, Grid } from 'lucide-react';
+
 import Script from 'next/script';
 import { SettingsProvider, useSettings } from '@/context/SettingsContext';
 import ChatWidget from '@/components/ChatWidget';
 
-const outfit = Outfit({ subsets: ['latin'], variable: '--font-heading', weight: ['300','400','500','600','700','800','900'] });
-const inter = Inter({ subsets: ['latin', 'cyrillic'], variable: '--font-body', weight: ['300','400','500','600','700'] });
+
+
+
 
 export default function RootLayout({ children }) {
   return (
@@ -42,7 +44,7 @@ function LayoutContent({ children }) {
 
   useEffect(() => {
     setMounted(true);
-    
+
     // Register Service Worker for PWA
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
       const handleRegister = async () => {
@@ -54,15 +56,19 @@ function LayoutContent({ children }) {
           console.warn('ServiceWorker registration failed:', error);
         }
       };
-      
-      handleRegister();
+
+      if (document.readyState === 'complete') {
+        handleRegister();
+      } else {
+        window.addEventListener('load', handleRegister);
+      }
     }
   }, []);
 
   async function subscribeUserToPush(registration) {
     try {
       if (!registration.pushManager) return;
-      
+
       const keyRes = await fetch('/api/push');
       if (!keyRes.ok) return;
       const { publicKey } = await keyRes.json();
@@ -95,28 +101,81 @@ function LayoutContent({ children }) {
   }
 
   const navLinks = [
+    { name: 'Каталог', href: '/catalog' },
+    { name: 'Грузоперевозки', href: '/services/freight' },
+    { name: 'Грузчики', href: '/services/loaders' },
+    { name: 'Эвакуатор', href: '/services/evacuator' },
+    { name: 'Сантехник', href: '/services/plumber' },
+    { name: 'Электрик', href: '/services/electrician' },
+    { name: 'Ремонт', href: '/services/renovation' },
+  ];
+
+  const allServiceLinks = [
     { name: 'Грузоперевозки', href: '/services/freight' },
     { name: 'Грузчики', href: '/services/loaders' },
     { name: 'Аварийный комиссар', href: '/services/commissioner' },
     { name: 'Эвакуатор', href: '/services/evacuator' },
+    { name: 'Сантехник', href: '/services/plumber' },
+    { name: 'Электрик', href: '/services/electrician' },
+    { name: 'Ремонт помещений', href: '/services/renovation' },
+    { name: 'Юридические услуги', href: '/services/legal' },
+    { name: 'Частный риэлтор', href: '/services/realtor' },
   ];
 
   return (
-    <html lang="ru" className={`${outfit.variable} ${inter.variable}`}>
+    <html lang="ru">
       <head>
+        {/* Non-blocking Google Fonts — preconnect + async load */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+          media="print"
+          onLoad="this.media='all'"
+        />
+        <noscript>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" />
+        </noscript>
         <link rel="manifest" href="/manifest.json" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="theme-color" content="#030711" />
         <link rel="apple-touch-icon" href="/images/logo_premium.png" />
+        <meta property="og:site_name" content="Prim-Uslugi" />
+        <meta property="og:locale" content="ru_RU" />
+        <meta name="geo.region" content="RU-PRI" />
+        <meta name="geo.placename" content="Владивосток" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          "name": "Prim-Uslugi",
+          "description": "Профессиональные услуги во Владивостоке и Приморском крае: грузоперевозки, сантехник, электрик, ремонт, юридические услуги, риэлтор.",
+          "url": "https://prim-uslugi.ru",
+          "telephone": "+7-967-388-88-89",
+          "email": "prim-uslugi@internet.ru",
+          "address": { "@type": "PostalAddress", "addressLocality": "Владивосток", "addressRegion": "Приморский край", "addressCountry": "RU" },
+          "geo": { "@type": "GeoCoordinates", "latitude": 43.1332, "longitude": 131.9113 },
+          "openingHours": "Mo-Su 00:00-24:00",
+          "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "10000" }
+        }) }} />
       </head>
       <body className="antialiased">
-
+        {/* Background Image Optimized */}
+        <div style={{ position: 'fixed', inset: 0, zIndex: -2, opacity: 0.35 }}>
+          <Image
+            src="/images/banner_freight_web.jpg"
+            alt="Background"
+            fill
+            priority
+            sizes="(max-width: 640px) 640px, 100vw"
+            style={{ objectFit: 'cover' }}
+          />
+        </div>
         {/* ===== NAVIGATION ===== */}
         <header
-          className={`fixed top-0 left-0 right-0 z-1000 transition-all duration-700 ${
-            (mounted && mobileMenuOpen) || isAdmin ? 'hidden' : 'block'
-          } ${isScrolled ? 'py-1' : 'py-2'}`}
+          className={`fixed top-0 left-0 right-0 z-1000 transition-all duration-700 ${(mounted && mobileMenuOpen) || isAdmin ? 'hidden' : 'block'
+            } ${isScrolled ? 'py-1' : 'py-2'}`}
         >
           <div className="container">
             <nav
@@ -144,7 +203,7 @@ function LayoutContent({ children }) {
                   transition: 'all 0.3s ease',
                   flexShrink: 0,
                 }}>
-                  <img src="/images/logo_premium.png" alt="Prim-Uslugi Logo" style={{ width: '1.625rem', height: '1.625rem', objectFit: 'contain' }} />
+                  <Image src="/images/logo_premium_sm.png" alt="Prim-Uslugi Logo" width={40} height={40} priority style={{ width: '1.625rem', height: '1.625rem', objectFit: 'contain' }} />
                 </div>
                 <div>
                   <div style={{ fontSize: '0.9375rem', fontWeight: 800, color: 'white', letterSpacing: '-0.025em', fontFamily: 'var(--font-heading)', lineHeight: 1 }}>
@@ -195,11 +254,12 @@ function LayoutContent({ children }) {
                   <Phone size={14} className="text-accent" />
                   <span>{settings.contact_phone}</span>
                 </div>
-                
+
                 {/* Phone Call - Mobile Only */}
-                <a 
-                  href={`tel:${settings.contact_phone.replace(/[^0-9+]/g, '')}`} 
+                <a
+                  href={`tel:${settings.contact_phone.replace(/[^0-9+]/g, '')}`}
                   className="flex lg:hidden items-center gap-2 p-2 text-white/80 hover:text-white"
+                  aria-label="Позвонить"
                 >
                   <Phone size={20} className="text-accent" />
                 </a>
@@ -260,191 +320,187 @@ function LayoutContent({ children }) {
           </div>
         </header>
 
-        {/* ===== MOBILE SIDE DRAWER ===== */}
-        <AnimatePresence>
-          {mobileMenuOpen && !isAdmin && (
-            <>
-              {/* Backdrop - only on mobile */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setMobileMenuOpen(false)}
-                className="md:hidden"
-                style={{
-                  position: 'fixed', inset: 0, zIndex: 1100,
-                  background: 'rgba(0,0,0,0.7)',
-                  backdropFilter: 'blur(4px)',
-                }}
-              />
+        {/* ===== MOBILE SIDE DRAWER — pure CSS, no framer-motion ===== */}
+        {/* Backdrop */}
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          className="md:hidden"
+          style={{
+            position: 'fixed', inset: 0, zIndex: 1100,
+            background: 'rgba(0,0,0,0.7)',
+            backdropFilter: 'blur(4px)',
+            opacity: mobileMenuOpen ? 1 : 0,
+            pointerEvents: mobileMenuOpen ? 'auto' : 'none',
+            transition: 'opacity 0.3s ease',
+          }}
+        />
 
-              {/* Drawer - only on mobile */}
-              <motion.div
-                initial={{ x: '-100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '-100%' }}
-                transition={{ type: 'tween', duration: 0.38, ease: [0.23, 1, 0.32, 1] }}
-                className="md:hidden"
+        {/* Drawer */}
+        <div
+          className="md:hidden"
+          style={{
+            position: 'fixed', inset: 0, zIndex: 9999,
+            background: '#030711',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+            transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(-100%)',
+            transition: 'transform 0.38s cubic-bezier(0.23, 1, 0.32, 1)',
+          }}
+        >
+          {/* Grid bg */}
+          <div style={{
+            position: 'absolute', inset: 0, zIndex: 0,
+            backgroundImage: 'linear-gradient(rgba(59,130,246,0.04) 1px,transparent 1px), linear-gradient(90deg,rgba(59,130,246,0.04) 1px,transparent 1px)',
+            backgroundSize: '40px 40px',
+          }} />
+
+          {/* Blue glow */}
+          <div style={{
+            position: 'absolute', top: '-20%', left: '-20%',
+            width: '60%', height: '60%',
+            background: 'radial-gradient(ellipse, rgba(59,130,246,0.06) 0%, transparent 70%)',
+            zIndex: 0,
+          }} />
+
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', zIndex: 1 }}>
+            {/* Header */}
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '1.25rem 1.5rem',
+              borderBottom: '1px solid rgba(255,255,255,0.05)',
+              background: 'rgba(0,0,0,0.3)',
+            }}>
+              <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }} onClick={() => setMobileMenuOpen(false)}>
+                <div style={{ width: '2rem', height: '2rem', borderRadius: '0.5rem', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.2rem' }}>
+                  <Image src="/images/logo_premium_sm.png" alt="Logo" width={40} height={40} priority style={{ width: '1.5rem', height: '1.5rem', objectFit: 'contain' }} />
+                </div>
+                <span style={{ color: 'white', fontWeight: 800, fontSize: '1rem', letterSpacing: '-0.02em', fontFamily: 'var(--font-heading)' }}>PRIM-USLUGI</span>
+              </Link>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
                 style={{
-                  position: 'fixed', inset: 0, zIndex: 9999,
-                  background: '#030711',
-                  overflow: 'hidden',
-                  display: 'flex',
-                  flexDirection: 'column',
+                  background: 'rgba(255,255,255,0.08)', padding: '0.75rem',
+                  borderRadius: '0.875rem', color: 'white', cursor: 'pointer',
+                  border: '1px solid rgba(255,255,255,0.1)', transition: 'all 0.3s ease',
+                }}
+                aria-label="Close menu"
+              >
+                <X size={22} />
+              </button>
+            </div>
+
+            {/* Nav links — CSS stagger */}
+            <div style={{ flex: 1, overflowY: 'auto', padding: '2rem 1.5rem' }}>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', margin: 0, padding: 0, listStyle: 'none' }}>
+                {navLinks.map((link, i) => (
+                  <li
+                    key={link.name}
+                    style={{
+                      animation: mobileMenuOpen ? 'menuItemIn 0.4s ease both' : 'none',
+                      animationDelay: `${0.08 + i * 0.055}s`,
+                    }}
+                  >
+                    <Link
+                      href={link.href}
+                      style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        padding: '1.25rem 1rem', borderRadius: '1rem',
+                        color: 'rgba(255,255,255,0.85)', textDecoration: 'none',
+                        fontWeight: 700, fontSize: '1.25rem',
+                        fontFamily: 'var(--font-heading)',
+                        borderBottom: '1px solid rgba(255,255,255,0.04)',
+                        transition: 'all 0.25s ease',
+                      }}
+                      onClick={() => setMobileMenuOpen(false)}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.color = 'white';
+                        e.currentTarget.style.paddingLeft = '1.5rem';
+                        e.currentTarget.style.background = 'rgba(59,130,246,0.08)';
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.color = 'rgba(255,255,255,0.85)';
+                        e.currentTarget.style.paddingLeft = '1rem';
+                        e.currentTarget.style.background = 'transparent';
+                      }}
+                    >
+                      <span>{link.name}</span>
+                      <ChevronRight size={20} style={{ color: 'var(--accent)', opacity: 0.7 }} />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Contacts block */}
+              <div
+                style={{
+                  marginTop: '2.5rem',
+                  animation: mobileMenuOpen ? 'menuItemIn 0.4s ease both' : 'none',
+                  animationDelay: '0.35s',
                 }}
               >
-                {/* Grid bg */}
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.25em', color: 'var(--accent)', opacity: 0.8, display: 'block', marginBottom: '1rem' }}>
+                  Контакты
+                </span>
                 <div style={{
-                  position: 'absolute', inset: 0, zIndex: 0,
-                  backgroundImage: 'linear-gradient(rgba(59,130,246,0.04) 1px,transparent 1px), linear-gradient(90deg,rgba(59,130,246,0.04) 1px,transparent 1px)',
-                  backgroundSize: '40px 40px',
-                }} />
-
-                {/* Blue glow */}
-                <div style={{
-                  position: 'absolute', top: '-20%', left: '-20%',
-                  width: '60%', height: '60%',
-                  background: 'radial-gradient(ellipse, rgba(59,130,246,0.06) 0%, transparent 70%)',
-                  zIndex: 0,
-                }} />
-
-                <div style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', zIndex: 1 }}>
-                  {/* Header */}
-                  <div style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '1.25rem 1.5rem',
-                    borderBottom: '1px solid rgba(255,255,255,0.05)',
-                    background: 'rgba(0,0,0,0.3)',
-                  }}>
-                    <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }} onClick={() => setMobileMenuOpen(false)}>
-                      <div style={{ width: '2rem', height: '2rem', borderRadius: '0.5rem', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.2rem' }}>
-                        <img src="/images/logo_premium.png" alt="Logo" style={{ width: '1.5rem', height: '1.5rem', objectFit: 'contain' }} />
-                      </div>
-                      <span style={{ color: 'white', fontWeight: 800, fontSize: '1rem', letterSpacing: '-0.02em', fontFamily: 'var(--font-heading)' }}>PRIM-USLUGI</span>
-                    </Link>
-                    <button
-                      onClick={() => setMobileMenuOpen(false)}
-                      style={{
-                        background: 'rgba(255,255,255,0.08)', padding: '0.75rem',
-                        borderRadius: '0.875rem', color: 'white', cursor: 'pointer',
-                        border: '1px solid rgba(255,255,255,0.1)', transition: 'all 0.3s ease',
-                      }}
-                      aria-label="Close menu"
-                    >
-                      <X size={22} />
-                    </button>
-                  </div>
-
-                  {/* Nav links */}
-                  <div style={{ flex: 1, overflowY: 'auto', padding: '2rem 1.5rem' }}>
-                    <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', margin: 0, padding: 0, listStyle: 'none' }}>
-                      {navLinks.map((link, i) => (
-                        <motion.li
-                          key={link.name}
-                          initial={{ opacity: 0, x: -24 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.08 + i * 0.06, ease: [0.23, 1, 0.32, 1] }}
-                        >
-                          <Link
-                            href={link.href}
-                            style={{
-                              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                              padding: '1.25rem 1rem', borderRadius: '1rem',
-                              color: 'rgba(255,255,255,0.85)', textDecoration: 'none',
-                              fontWeight: 700, fontSize: '1.25rem',
-                              fontFamily: 'var(--font-heading)',
-                              borderBottom: '1px solid rgba(255,255,255,0.04)',
-                              transition: 'all 0.25s ease',
-                            }}
-                            onClick={() => setMobileMenuOpen(false)}
-                            onMouseEnter={e => {
-                              e.currentTarget.style.color = 'white';
-                              e.currentTarget.style.paddingLeft = '1.5rem';
-                              e.currentTarget.style.background = 'rgba(59,130,246,0.08)';
-                            }}
-                            onMouseLeave={e => {
-                              e.currentTarget.style.color = 'rgba(255,255,255,0.85)';
-                              e.currentTarget.style.paddingLeft = '1rem';
-                              e.currentTarget.style.background = 'transparent';
-                            }}
-                          >
-                            <span>{link.name}</span>
-                            <ChevronRight size={20} style={{ color: 'var(--accent)', opacity: 0.7 }} />
-                          </Link>
-                        </motion.li>
-                      ))}
-                    </ul>
-
-                    {/* Contacts block */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.35, ease: [0.23, 1, 0.32, 1] }}
-                      style={{ marginTop: '2.5rem' }}
-                    >
-                      <span style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.25em', color: 'var(--accent)', opacity: 0.8, display: 'block', marginBottom: '1rem' }}>
-                        Контакты
-                      </span>
-                      <div style={{
-                        background: 'rgba(255,255,255,0.04)',
-                        border: '1px solid rgba(255,255,255,0.07)',
-                        borderRadius: '1.25rem', padding: '1.5rem',
-                        display: 'flex', flexDirection: 'column', gap: '1.25rem',
-                      }}>
-                        <a href={`tel:${settings.contact_phone.replace(/[^0-9+]/g, '')}`} style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'white', fontWeight: 700, fontSize: '1.125rem', textDecoration: 'none' }}>
-                          <Phone size={22} style={{ color: 'var(--accent)' }} />
-                          {settings.contact_phone}
-                        </a>
-                        <a href={`mailto:${settings.contact_email}`} style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'rgba(255,255,255,0.7)', fontWeight: 600, fontSize: '1rem', textDecoration: 'none' }}>
-                          <Mail size={20} style={{ color: 'var(--accent)' }} />
-                          {settings.contact_email}
-                        </a>
-                      </div>
-                    </motion.div>
-
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.45, ease: [0.23, 1, 0.32, 1] }}
-                      style={{ marginTop: '1.5rem' }}
-                    >
-                      <Link
-                        href="#contact"
-                        style={{
-                          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-                          padding: '1.125rem', borderRadius: '1.25rem',
-                          background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-                          color: 'white', fontWeight: 700, fontSize: '1rem',
-                          textDecoration: 'none',
-                          boxShadow: '0 8px 32px rgba(59,130,246,0.35)',
-                        }}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        Заказать услугу
-                        <ArrowRight size={18} />
-                      </Link>
-                    </motion.div>
-                  </div>
-
-                  {/* Footer cities */}
-                  <div style={{
-                    padding: '1.25rem 1.5rem',
-                    borderTop: '1px solid rgba(255,255,255,0.05)',
-                    background: 'rgba(0,0,0,0.3)',
-                    display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'center',
-                  }}>
-                    {['Владивосток', 'Уссурийск', 'Находка'].map(city => (
-                      <span key={city} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(255,255,255,0.35)' }}>
-                        <MapPin size={11} style={{ color: 'var(--accent)', opacity: 0.6 }} />
-                        {city}
-                      </span>
-                    ))}
-                  </div>
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.07)',
+                  borderRadius: '1.25rem', padding: '1.5rem',
+                  display: 'flex', flexDirection: 'column', gap: '1.25rem',
+                }}>
+                  <a href={`tel:${settings.contact_phone.replace(/[^0-9+]/g, '')}`} style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'white', fontWeight: 700, fontSize: '1.125rem', textDecoration: 'none' }}>
+                    <Phone size={22} style={{ color: 'var(--accent)' }} />
+                    {settings.contact_phone}
+                  </a>
+                  <a href={`mailto:${settings.contact_email}`} style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'rgba(255,255,255,0.7)', fontWeight: 600, fontSize: '1rem', textDecoration: 'none' }}>
+                    <Mail size={20} style={{ color: 'var(--accent)' }} />
+                    {settings.contact_email}
+                  </a>
                 </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
+              </div>
+
+              {/* CTA */}
+              <div
+                style={{
+                  marginTop: '1.5rem',
+                  animation: mobileMenuOpen ? 'menuItemIn 0.4s ease both' : 'none',
+                  animationDelay: '0.45s',
+                }}
+              >
+                <Link
+                  href="#contact"
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                    padding: '1.125rem', borderRadius: '1.25rem',
+                    background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                    color: 'white', fontWeight: 700, fontSize: '1rem',
+                    textDecoration: 'none',
+                    boxShadow: '0 8px 32px rgba(59,130,246,0.35)',
+                  }}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Заказать услугу
+                  <ArrowRight size={18} />
+                </Link>
+              </div>
+            </div>
+
+            {/* Footer cities */}
+            <div style={{
+              padding: '1.25rem 1.5rem',
+              borderTop: '1px solid rgba(255,255,255,0.05)',
+              background: 'rgba(0,0,0,0.3)',
+              display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'center',
+            }}>
+              {['Владивосток', 'Уссурийск', 'Находка'].map(city => (
+                <span key={city} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(255,255,255,0.35)' }}>
+                  <MapPin size={11} style={{ color: 'var(--accent)', opacity: 0.6 }} />
+                  {city}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {/* ===== MAIN CONTENT ===== */}
         <main className={`${(mounted && mobileMenuOpen) ? 'hidden' : 'block'}`}>
@@ -487,7 +543,7 @@ function LayoutContent({ children }) {
               <div>
                 <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '1rem', marginBottom: '1.75rem', textDecoration: 'none' }}>
                   <div style={{ width: '3rem', height: '3rem', borderRadius: '0.875rem', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(59,130,246,0.2)', flexShrink: 0 }}>
-                    <img src="/images/logo_premium.png" alt="Logo" style={{ width: '2.25rem', height: '2.25rem', objectFit: 'contain' }} />
+                    <Image src="/images/logo_premium_sm.png" alt="Logo" width={60} height={60} style={{ width: '2.25rem', height: '2.25rem', objectFit: 'contain' }} />
                   </div>
                   <div>
                     <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'white', fontFamily: 'var(--font-heading)', letterSpacing: '-0.025em' }}>PRIM-USLUGI</div>
@@ -507,7 +563,7 @@ function LayoutContent({ children }) {
                   border: '1px solid rgba(245,158,11,0.2)',
                   borderRadius: '2rem',
                 }}>
-                  {[1,2,3,4,5].map(i => (
+                  {[1, 2, 3, 4, 5].map(i => (
                     <Star key={i} size={12} fill="var(--accent-gold)" style={{ color: 'var(--accent-gold)' }} />
                   ))}
                   <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent-gold-light)', marginLeft: '0.25rem' }}>4.9 / 5.0</span>
@@ -516,23 +572,17 @@ function LayoutContent({ children }) {
 
               {/* Services */}
               <div>
-                <h4 style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.75rem' }}>
+                <h3 style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.75rem' }}>
                   Услуги
-                </h4>
+                </h3>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', margin: 0, padding: 0, listStyle: 'none' }}>
-                  {navLinks.map(link => (
+                  {allServiceLinks.map(link => (
                     <li key={link.name}>
                       <Link
                         href={link.href}
                         style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem', transition: 'all 0.25s ease' }}
-                        onMouseEnter={e => {
-                          e.currentTarget.style.color = 'var(--accent-bright)';
-                          e.currentTarget.style.transform = 'translateX(4px)';
-                        }}
-                        onMouseLeave={e => {
-                          e.currentTarget.style.color = 'var(--text-muted)';
-                          e.currentTarget.style.transform = 'translateX(0)';
-                        }}
+                        onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent-bright)'; e.currentTarget.style.transform = 'translateX(4px)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.transform = 'translateX(0)'; }}
                       >
                         <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--accent)', opacity: 0.6, flexShrink: 0 }} />
                         {link.name}
@@ -544,9 +594,9 @@ function LayoutContent({ children }) {
 
               {/* Company */}
               <div>
-                <h4 style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.75rem' }}>
+                <h3 style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.75rem' }}>
                   Компания
-                </h4>
+                </h3>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', margin: 0, padding: 0, listStyle: 'none' }}>
                   {[
                     { label: 'Конфиденциальность', href: '/services/privacy' },
@@ -565,7 +615,7 @@ function LayoutContent({ children }) {
                     </li>
                   ))}
                   <li style={{ marginTop: '0.5rem' }}>
-                    <h5 style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>Регионы</h5>
+                    <h4 style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>Регионы</h4>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       {['Владивосток', 'Уссурийск', 'Находка'].map(city => (
                         <span key={city} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-dim)', fontSize: '0.875rem' }}>
@@ -580,9 +630,9 @@ function LayoutContent({ children }) {
 
               {/* Contacts */}
               <div>
-                <h4 style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.75rem' }}>
+                <h3 style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.75rem' }}>
                   Связь с нами
-                </h4>
+                </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                   {[
                     { icon: <Phone size={18} />, label: 'Горячая линия', value: settings.contact_phone, href: `tel:${settings.contact_phone.replace(/[^0-9+]/g, '')}` },
@@ -667,6 +717,7 @@ function LayoutContent({ children }) {
                 textDecoration: 'none',
               }}
               className="md:hidden"
+              aria-label="Позвонить"
             >
               <Phone size={22} />
             </a>

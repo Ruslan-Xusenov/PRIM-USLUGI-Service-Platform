@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { m } from '@/components/MotionMock';
 import { ArrowUpRight, Calendar, Clock, Sparkles } from 'lucide-react';
 
 const TYPE_COLORS = {
@@ -26,7 +27,7 @@ function NewsCard({ n, isPlaceholder }) {
   const readTime = Math.max(1, Math.ceil(wordCount / 170));
 
   const content = (
-    <motion.div
+    <m.div
       variants={item}
       style={{
         background: 'rgba(12, 24, 45, 0.7)',
@@ -57,10 +58,12 @@ function NewsCard({ n, isPlaceholder }) {
         background: 'rgba(255,255,255,0.02)',
       }}>
         {!isPlaceholder && n.image_url ? (
-          <img 
+          <Image 
             src={n.image_url} 
             alt={n.title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
+            fill
+            sizes="(max-width: 768px) 100vw, 400px"
+            style={{ objectFit: 'cover', transition: 'transform 0.5s ease' }}
             onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
             onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
           />
@@ -107,7 +110,7 @@ function NewsCard({ n, isPlaceholder }) {
         </div>
 
         {/* Title */}
-        <h4 style={{
+        <h3 style={{
           color: 'white', fontSize: '1.05rem', fontWeight: 800,
           marginBottom: '0.75rem', lineHeight: 1.35,
           fontFamily: 'var(--font-heading)',
@@ -116,7 +119,7 @@ function NewsCard({ n, isPlaceholder }) {
           transition: 'color 0.3s',
         }}>
           {isPlaceholder ? 'Новые горизонты логистики в Приморье' : n.title}
-        </h4>
+        </h3>
 
         {/* Excerpt */}
         <p style={{
@@ -146,7 +149,7 @@ function NewsCard({ n, isPlaceholder }) {
           </span>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 
   if (isPlaceholder) return content;
@@ -184,7 +187,7 @@ export default function NewsFeed() {
     : news.slice(0, 6);
 
   return (
-    <motion.div
+    <m.div
       variants={container}
       initial="hidden"
       whileInView="show"
@@ -198,6 +201,6 @@ export default function NewsFeed() {
       {items.map((n, i) => (
         <NewsCard key={n ? n.id : i} n={n} isPlaceholder={!n} />
       ))}
-    </motion.div>
+    </m.div>
   );
 }
