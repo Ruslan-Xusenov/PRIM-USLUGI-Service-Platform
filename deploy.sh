@@ -1,77 +1,69 @@
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
+#!/bin/bash
+set -e
 
-echo -e "${YELLOW}>>> Starting update check for Prim-Uslugi...${NC}"
+DOMAIN="primuslugi.ruslandev.uz"
+REPO="https://github.com/Ruslan-Xusenov/PRIM-USLUGI-Service-Platform.git"
+WEB_DIR="/var/www/$DOMAIN"
 
-for cmd in git docker docker-compose; do
-  if ! [ -x "$(command -v $cmd)" ]; then
-    echo -e "${RED}Error: $cmd is not installed.${NC}" >&2
-    exit 1
-  fi
-done
+echo "Updating packages..."
+apt-get update -y
 
-if [ ! -f .env.local ]; then
-  echo -e "${RED}Error: .env.local file not found!${NC}"
-  echo -e "${YELLOW}Please create .env.local with secrets before running this script.${NC}"
-  exit 1
+echo "Installing curl, git, nginx, certbot..."
+apt-get install -y curl git nginx python3-certbot-nginx
+
+if ! command -v node &> /dev/null
+then
+    echo "Installing Node.js 20..."
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+    apt-get install -y nodejs
 fi
 
-echo -e "${YELLOW}Checking for updates on GitHub...${NC}"
-git fetch origin main
-
-LOCAL=$(git rev-parse HEAD)
-REMOTE=$(git rev-parse origin/main)
-
-if [ "$LOCAL" = "$REMOTE" ]; then
-    echo -e "${GREEN}System is already up to date (Version: $LOCAL).${NC}"
-    
-    if [ ! "$(docker ps -q -f name=prim-uslugi-web)" ]; then
-        echo -e "${YELLOW}Application container is not running. Starting it now...${NC}"
-        docker-compose up -d
-    else
-        echo -e "${GREEN}Application is already running and healthy.${NC}"
-        exit 0
-    fi
-else
-    echo -e "${YELLOW}Update detected! Pulling new version...${NC}"
-    git pull origin main
-    
-    echo -e "${GREEN}Syncing configuration...${NC}"
-    mkdir -p public/uploads
-    if [ ! -f prim_uslugi.db ]; then
-        touch prim_uslugi.db
-        chmod 666 prim_uslugi.db
-    fi
-
-    echo -e "${GREEN}Building and deploying new version...${NC}"
-    docker-compose up -d --build
-    if [ $? -eq 0 ]; then
-        # Wait for container to settle
-        echo -e "${YELLOW}Giving the container a moment to settle...${NC}"
-        sleep 2
-        
-        # Fix permissions on the host file
-        if [ -f "prim_uslugi.db" ]; then
-            chmod 666 prim_uslugi.db
-        fi
-
-        # Database seeding is now automatically handled by Next.js inside src/lib/db.js
-        echo -e "${YELLOW}Database is self-seeding on startup...${NC}"
-
-        echo -e "${GREEN}====================================================${NC}"
-        echo -e "${GREEN}Update Successful!${NC}"
-        echo -e "${GREEN}New Version: $(git rev-parse HEAD)${NC}"
-        echo -e "${GREEN}The app is running on port 3005.${NC}"
-        echo -e "${GREEN}====================================================${NC}"
-        
-        # Safe cleanup: only remove dangling images specifically labeled for this project
-        echo -e "${YELLOW}Cleaning up old Docker images for this project...${NC}"
-        docker image prune -f --filter "label=project=prim-uslugi"
-        
-    else
-        echo -e "${RED}Deployment failed. Please check logs with: docker-compose logs${NC}"
-        exit 1
-    fi
+if ! command -v pm2 &> /dev/null
+then
+    echo "Installing pm2..."
+    npm install -g pm2
 fi
+
+echo "Setting up application directory..."
+if [ -d "$WEB_DIR" ]; then
+    rm -rf "$WEB_DIR"
+fi
+git clone "$REPO" "$WEB_DIR"
+cd "$WEB_DIR"
+
+echo "Installing dependencies and building..."
+npm install
+npm run build
+
+echo "Starting with pm2..."
+pm2 delete "$DOMAIN" || true
+pm2 start npm --name "$DOMAIN" -- run start
+pm2 save
+pm2 startup systemd -u root --hp /root || true
+
+echo "Setting up Nginx..."
+cat << 'NGINX' > /etc/nginx/sites-available/$DOMAIN
+server {
+    listen 80;
+    server_name primuslugi.ruslandev.uz;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+NGINX
+
+ln -sf /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/
+rm -f /etc/nginx/sites-enabled/default
+nginx -t
+systemctl restart nginx
+
+echo "Attempting to get SSL certificate..."
+certbot --nginx -d $DOMAIN --non-interactive --agree-tos --register-unsafely-without-email || true
+
+echo "Deployment complete!"

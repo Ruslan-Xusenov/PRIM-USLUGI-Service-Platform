@@ -248,6 +248,11 @@ export default function ContactForm() {
                   <option value="Грузчики">💪 Грузчики</option>
                   <option value="Аварийный комиссар">🛡️ Аварийный комиссар</option>
                   <option value="Эвакуатор">🚜 Эвакуатор</option>
+                  <option value="Сантехник">🔧 Сантехник</option>
+                  <option value="Электрик">⚡ Электрик</option>
+                  <option value="Ремонт помещений">🏗️ Ремонт помещений</option>
+                  <option value="Юридические услуги">⚖️ Юридические услуги</option>
+                  <option value="Частный риэлтор">🏠 Частный риэлтор</option>
                 </select>
               </div>
 
