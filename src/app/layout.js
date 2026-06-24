@@ -1,9 +1,6 @@
 'use client';
 import './globals.css';
-import { Inter, Outfit } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin', 'cyrillic'], variable: '--font-body', display: 'swap' });
-const outfit = Outfit({ subsets: ['latin'], variable: '--font-heading', display: 'swap' });
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -155,7 +152,7 @@ function LayoutContent({ children }) {
           "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "10000" }
         }) }} />
       </head>
-      <body className={`${inter.variable} ${outfit.variable} antialiased`}>
+      <body className="antialiased">
         {/* Background Image Optimized for Mobile and Web */}
         <picture>
           <source media="(max-width: 640px)" srcSet="/images/banner_freight_mobile.jpg" />
